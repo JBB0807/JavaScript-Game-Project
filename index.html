@@ -15,7 +15,7 @@
     <div class="div-game-board">
         <div class="div-header">
             <div id="left-header">
-                <div>Credits</div>
+                <div class="div-screen-select switch-screen-credits">Credits</div>
                 <div>
                     <div>Scrore: </div>
                     <div></div>
@@ -24,39 +24,46 @@
             <div id="right-header">
                 <div>Sound</div>
                 <div>help</div>
+                <div class="div-screen-select switch-screen-pause">pause</div>
             </div>
         </div>
-        <div class="div-screen-main">
+        <div class="div-screen" id="screen-main">
             <div class="div-title" id="game-title">GAME TITLE</div>
-            <div id="main-menu">
+            <div class="div-menu" id="main-menu">
                 <div>Player Name</div>
                 <div id="difficulty-selector">
                     <div><</div>
                     <div>Difficulty</div>
                     <div>></div>
                 </div>
-                <div>Start Game</div>
+                <div class="div-screen-select switch-screen-play" id="menu-start-game">Start Game</div>
             </div>
         </div>
-        <div class="div-screen-play">
+        <div class="div-screen" id="screen-play">
+            <div>Game Play on</div>
         </div>
-        <div class="div-screen-pause">
+        <div class="div-screen" id="screen-pause">
             <div class="div-title" id="pause-title">Paused</div>
             <div class="div-menu" id="pause-menu">
-                <div>Resume</div>
-                <div>Main Menu</div>
+                <div class="div-screen-select switch-screen-play">Resume</div>
+                <div class="div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
-        <div class="div-screen-game-over">
+        <div class="div-screen" id="screen-game-over">
             <div class="div-title" id="game-over-title">Game Over</div>
             <div class="div-menu" id="game-over-menu">
-                <div>Try Again</div>
-                <div>Main Menu</div>
+                <div class="div-screen-select switch-screen-play">Try Again</div>
+                <div class="div-screen-select switch-screen-main">Main Menu</div>
+            </div>
+        </div>
+        <div class="div-screen" id="screen-credits">
+            <div class="div-title" id="credits-title">Credits</div>
+            <div class="div-menu" id="credits-menu">
+                <div class="div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
         <div class="div-game-object-containers">
         </div>
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
