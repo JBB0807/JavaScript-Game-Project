@@ -30,11 +30,11 @@
         <div class="div-screen" id="screen-main">
             <div class="div-title" id="game-title">GAME TITLE</div>
             <div class="div-menu" id="main-menu">
-                <div>Player Name</div>
+                <input id="input-player-name" type="text" placeholder="Enter Player Name">
                 <div id="difficulty-selector">
-                    <div><</div>
-                    <div>Difficulty</div>
-                    <div>></div>
+                    <div id="difficulty-adjust-left"><</div>
+                    <div id="difficulty-level-display">Difficulty</div>
+                    <div id="difficulty-adjust-right">></div>
                 </div>
                 <div class="div-screen-select switch-screen-play" id="menu-start-game">Start Game</div>
             </div>
@@ -45,7 +45,7 @@
         <div class="div-screen" id="screen-pause">
             <div class="div-title" id="pause-title">Paused</div>
             <div class="div-menu" id="pause-menu">
-                <div class="div-screen-select switch-screen-play">Resume</div>
+                <div class="div-screen-select switch-screen-play" id="menu-resume">Resume</div>
                 <div class="div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
