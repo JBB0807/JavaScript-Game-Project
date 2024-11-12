@@ -1,0 +1,75 @@
+@charset "utf-8";
+
+
+/* CSS Reset */
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+}
+
+.div-game-board {
+    position: absolute;
+
+    /* implment 3:4 aspect ratio with a height of 640px for now */
+    margin: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 480px;
+    height: 640px;
+    border: 2px solid black;
+}
+
+#left-header{
+ position: absolute;
+ display: flex;
+ top: 0;
+ left: 0;
+ margin: 1rem;
+}
+
+#right-header{
+    position: absolute;
+    display: flex;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+}
+
+.div-title {
+    position: absolute;
+    top: 0;
+    bottom: 15rem;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+}
+
+.div-menu {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 3rem;
+}
+
+.div-menu * {
+    text-align: center;
+    margin: .5rem;
+}
+
+#difficulty-selector {
+    display: flex;
+    justify-content: center;    
+}
