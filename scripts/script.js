@@ -14,7 +14,7 @@ const gameBoard = {
 
   init() {
     this.switchScreen("#screen-main");
-    this.adjustDifficulty(0)
+    this.adjustDifficulty(0);
   },
 
   startGame() {
@@ -28,7 +28,7 @@ const gameBoard = {
     console.log(`Game Paused`);
   },
 
-  resumeGame(){
+  resumeGame() {
     this.isRunning = true;
     console.log(`Game Resumed`);
   },
@@ -52,6 +52,32 @@ const gameBoard = {
     }
     $(screenID).show();
     this.activeScreen = screenID;
+    this.updateHeader();
+  },
+
+  updateHeader() {
+    $(".div-header-item").hide();
+    $("#header-item-sound").show();
+
+    if (this.activeScreen === "#screen-credits") {
+      return;
+    }
+
+    if (this.activeScreen === "#screen-main") {
+      $("#header-item-credits").show();
+    } else {
+      $("#header-item-score").show();
+      if (this.activeScreen === "#screen-play") {
+        $("#header-item-pause").show();
+      }
+    }
+
+    if (
+      this.activeScreen === "#screen-main" ||
+      this.activeScreen === "#screen-pause"
+    ) {
+      $("#header-item-help").show();
+    }
   },
 };
 
@@ -68,11 +94,11 @@ function setupListeners() {
     if ($(this).hasClass("switch-screen-play")) {
       console.log("Switch to play screen");
       gameBoard.switchScreen("#screen-play");
-        if(elementId === "menu-start-game") {
-            gameBoard.startGame();
-        } else if (elementId === "menu-resume") {
-            gameBoard.resumeGame();
-        }
+      if (elementId === "menu-start-game") {
+        gameBoard.startGame();
+      } else if (elementId === "menu-resume") {
+        gameBoard.resumeGame();
+      }
     } else if ($(this).hasClass("switch-screen-main")) {
       console.log("Switch to main screen");
       gameBoard.switchScreen("#screen-main");
