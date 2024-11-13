@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=VT323&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -12,57 +15,58 @@
 </head>
 
 <body>
+    <div class="background"></div>
     <div class="div-game-board">
         <div class="div-header">
             <div id="left-header">
-                <div class="div-header-item div-screen-select switch-screen-credits" id="header-item-credits">Credits</div>
+                <div class="clickable div-header-item div-screen-select switch-screen-credits" id="header-item-credits">Credits</div>
                 <div class="div-header-item" id="header-item-score">
-                    <div>Scrore: </div>
+                    <div>Score: </div>
                     <div></div>
                 </div>
             </div>
             <div id="right-header">
-                <div class="div-header-item" id="header-item-sound">Sound</div>
-                <div class="div-header-item" id="header-item-help">help</div>
-                <div class="div-header-item div-screen-select switch-screen-pause" id="header-item-pause">pause</div>
+                <div class="clickable div-header-item" id="header-item-help">help</div>
+                <div class="clickable div-header-item div-screen-select switch-screen-pause" id="header-item-pause">pause</div>
+                <div class="clickable div-header-item" id="header-item-sound">Sound</div>
             </div>
         </div>
         <div class="div-screen" id="screen-main">
-            <div class="div-title" id="game-title">GAME TITLE</div>
+            <div class="div-title" id="game-title">MARQUEE</div>
             <div class="div-menu" id="main-menu">
                 <input id="input-player-name" type="text" placeholder="Enter Player Name">
                 <div id="difficulty-selector">
-                    <div id="difficulty-adjust-left"><</div>
+                    <div class="clickable" id="difficulty-adjust-left"><</div>
                     <div id="difficulty-level-display">Difficulty</div>
-                    <div id="difficulty-adjust-right">></div>
+                    <div class="clickable" id="difficulty-adjust-right">></div>
                 </div>
-                <div class="div-screen-select switch-screen-play" id="menu-start-game">Start Game</div>
+                <div class="clickable div-screen-select switch-screen-play" id="menu-start-game">Start Game</div>
             </div>
         </div>
         <div class="div-screen" id="screen-play">
-            <div>Game Play on</div>
         </div>
         <div class="div-screen" id="screen-pause">
             <div class="div-title" id="pause-title">Paused</div>
             <div class="div-menu" id="pause-menu">
-                <div class="div-screen-select switch-screen-play" id="menu-resume">Resume</div>
-                <div class="div-screen-select switch-screen-main">Main Menu</div>
+                <div class="clickable div-screen-select switch-screen-play" id="menu-resume">Resume</div>
+                <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
         <div class="div-screen" id="screen-game-over">
             <div class="div-title" id="game-over-title">Game Over</div>
             <div class="div-menu" id="game-over-menu">
-                <div class="div-screen-select switch-screen-play">Try Again</div>
-                <div class="div-screen-select switch-screen-main">Main Menu</div>
+                <div class="clickable div-screen-select switch-screen-play">Try Again</div>
+                <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
         <div class="div-screen" id="screen-credits">
             <div class="div-title" id="credits-title">Credits</div>
             <div class="div-menu" id="credits-menu">
-                <div class="div-screen-select switch-screen-main">Main Menu</div>
+                <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
-        <div class="div-game-object-containers">
+        <div class="div-screen div-game-object-containers">
+            <div id="player-spaceship"><-A-></div>
         </div>
     </div>
 
