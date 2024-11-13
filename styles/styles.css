@@ -107,3 +107,7 @@ body {
     display: flex;
     justify-content: center;
 }
+
+.div-game-object {
+    position: absolute;
+}
