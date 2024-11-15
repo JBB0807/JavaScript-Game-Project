@@ -42,6 +42,12 @@ body {
     background-color: whitesmoke;
 }
 
+.div-screen {
+    position: absolute;
+    height: inherit;
+    width: inherit;
+}
+
 .div-header > * > * {
     margin: 1rem;
 }
@@ -109,5 +115,9 @@ body {
 }
 
 .div-game-object {
+    position: absolute;
+}
+
+.ammo {
     position: absolute;
 }
