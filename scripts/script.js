@@ -7,14 +7,14 @@ const gameBoard = {
   arrEnemies: [],
   arrObstacles: [],
   playerAmmo: [],
-  enemyAmmo:[],
+  enemyAmmo: [],
 
   score: null,
   difficultyOptions: ["Easy", "Normal", "Hard"],
   diffifucltyIndex: 1,
   isRunning: false,
   activeScreen: null,
-  $gamePlaySection: $("#screen-play"),
+  domReference: $("#screen-play"),
 
   init() {
     gameBoard.switchScreen("#screen-main");
@@ -65,7 +65,7 @@ const gameBoard = {
   addGameObject(elementID, xPostiion, yPosition) {
     if (elementID === "#player-spaceship") {
       gameBoard.objPlayer = new Player();
-    } else if(elementID === '#drone-spaceship') {
+    } else if (elementID === "#drone-spaceship") {
       gameBoard.arrEnemies.push(new Drone());
     }
   },
@@ -104,12 +104,14 @@ const gameBoard = {
     }
   },
 
-  removeIfOutside(arrOjb){
+  removeIfOutside(arrOjb) {
     arrOjb.forEach((obj) => {
-      if(gameBoard.$gamePlaySection.width() < Math.abs(getXPosition(obj)) 
-        || gameBoard.$gamePlaySection.height() < Math.abs(getYPosition(obj))
-        || getYPosition(obj) < 0){
-          removeObject(obj,arrOjb);
+      if (
+        gameBoard.domReference.width() < Math.abs(getXPosition(obj)) ||
+        gameBoard.domReference.height() < Math.abs(getYPosition(obj)) ||
+        getYPosition(obj) < 0
+      ) {
+        removeObject(obj, arrOjb);
       }
     });
   },
@@ -122,6 +124,7 @@ const gameBoardEventHandler = {
   playerFiringRate: 1000 / 25,
   playerFireKeyFrame: null,
   requestAnimationFrameID: null,
+  lastDroneKeyframe: null,
 
   registerKeyPress(key) {
     if (
@@ -172,18 +175,29 @@ const gameBoardEventHandler = {
       gameBoardEventHandler.objectCleanup();
       gameBoardEventHandler.detectCollision();
       gameBoardEventHandler.keyframe = highResTimestamp;
-    }
 
+      if(highResTimestamp - gameBoardEventHandler.lastDroneKeyframe > 1500 ){
+        gameBoardEventHandler.lastDroneKeyframe = highResTimestamp; 
+        gameBoard.addGameObject("#drone-spaceship");
+        gameBoard.arrEnemies.forEach((enemy) => {
+          enemy.fire();
+        });
+      }
+    }
 
     gameBoardEventHandler.requestAnimationFrameID =
       window.requestAnimationFrame(gameBoardEventHandler.checkKeyFrame);
   },
 
-  updateEnemyMovement(highResTimestamp){
+  updateEnemyMovement(highResTimestamp) {
     gameBoard.arrEnemies.forEach((enemy) => {
-        enemy.updatePosition(highResTimestamp, gameBoardEventHandler.keyframe, 0, -1);
-      } 
-    );
+      enemy.updatePosition(
+        highResTimestamp,
+        gameBoardEventHandler.keyframe,
+        0,
+        -1
+      );
+    });
   },
 
   updatePlayerMovement(highResTimestamp) {
@@ -208,12 +222,11 @@ const gameBoardEventHandler = {
       }
 
       if (key.toUpperCase() === "X") {
-        gameBoard.addGameObject('#drone-spaceship');
+        gameBoard.addGameObject("#drone-spaceship");
       }
-
     });
 
-    if(xMovement !==0 || yMovement !== 0){
+    if (xMovement !== 0 || yMovement !== 0) {
       gameBoard.objPlayer.updatePosition(
         highResTimestamp,
         gameBoardEventHandler.keyframe,
@@ -239,20 +252,25 @@ const gameBoardEventHandler = {
     gameBoard.playerAmmo.forEach((ammo) => {
       ammo.updatePosition(gameBoardEventHandler.keyframe, highResTimestamp);
     });
+
+    gameBoard.enemyAmmo.forEach((ammo) => {
+      ammo.updatePosition(gameBoardEventHandler.keyframe, highResTimestamp);
+    });
+
   },
 
-  objectCleanup(){
+  objectCleanup() {
     gameBoard.removeIfOutside(gameBoard.playerAmmo);
+    gameBoard.removeIfOutside(gameBoard.enemyAmmo);
     gameBoard.removeIfOutside(gameBoard.arrEnemies);
   },
 
-  detectCollision(){
-
+  detectCollision() {
     //
     //detect player ammo against enemies
     gameBoard.playerAmmo.forEach((ammo) => {
       gameBoard.arrEnemies.forEach((enemy) => {
-        if(isOverlapping(ammo, enemy)){
+        if (isOverlapping(ammo, enemy)) {
           enemy.takeDmage(ammo.damage);
           removeObject(ammo, gameBoard.playerAmmo);
         }
@@ -260,13 +278,19 @@ const gameBoardEventHandler = {
     });
 
     gameBoard.arrEnemies.forEach((enemy) => {
-      if(isOverlapping(enemy, gameBoard.objPlayer)){
+      if (isOverlapping(enemy, gameBoard.objPlayer)) {
         enemy.takeDmage(gameBoard.objPlayer.atk);
         gameBoard.objPlayer.takeDmage(enemy.atk);
       }
     });
-  }
 
+    gameBoard.enemyAmmo.forEach((ammo) => {
+      if (isOverlapping(ammo, gameBoard.objPlayer)) {
+        gameBoard.objPlayer.takeDmage(ammo.damage);
+        removeObject(ammo, gameBoard.enemyAmmo);
+      }
+    });
+  },
 };
 
 $(document).ready(function () {
@@ -321,44 +345,47 @@ function setupListeners() {
   });
 }
 
-
 //
 //Utility functions
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-function getXPosition(obj){
+function getXPosition(obj) {
   return parseInt($(obj.domReference).css("left"), 10);
 }
 
-function getYPosition(obj){
+function getYPosition(obj) {
   return parseInt($(obj.domReference).css("bottom"), 10);
 }
-
-function removeObject(obj, arr){
-  $(obj.domReference).remove();
-  const index = arr.indexOf(obj);
-  arr.splice(index,1);
+function getCenterXPosition(obj) {
+  return getXPosition(obj) + obj.domReference.width() / 2;
 }
 
-function isOverlapping(obj1, obj2){
+function getCenterYPosition(obj) {
+  return getXPosition(obj) + obj.domReference.height() / 2;
+}
+
+function removeObject(obj, arr) {
+  $(obj.domReference).remove();
+  const index = arr.indexOf(obj);
+  arr.splice(index, 1);
+}
+
+function isOverlapping(obj1, obj2) {
   //getting corner coordinates for object 1
-  const x1_1 = Math.abs(parseInt($(obj1.domReference).css("left"), 10));
+  const x1_1 = Math.abs(getXPosition(obj1));
   const x1_2 = x1_1 + $(obj1.domReference).width();
-  const y1_1 = Math.abs(parseInt($(obj1.domReference).css("bottom"), 10));
+  const y1_1 = Math.abs(getYPosition(obj1));
   const y1_2 = y1_1 + $(obj1.domReference).height();
 
-  //getting corner coordinates for object 1
-  const x2_1 = Math.abs(parseInt($(obj2.domReference).css("left"), 10));
+  //getting corner coordinates for object 2
+  const x2_1 = Math.abs(getXPosition(obj2));
   const x2_2 = x2_1 + $(obj2.domReference).width();
-  const y2_1 = Math.abs(parseInt($(obj2.domReference).css("bottom"), 10));
+  const y2_1 = Math.abs(getYPosition(obj2));
   const y2_2 = y2_1 + $(obj2.domReference).height();
-  
-  // console.log('isOverlapping');
-  // console.log(`${x1_1}:${x1_2}:${x2_1}:${x2_2}:${y1_1}:${y1_2}:${y2_1}:${y2_2}`);
 
-  return (x1_1 < x2_2 && x1_2 > x2_1 && y1_1 < y2_2 && y1_2 > y2_1)
+  return x1_1 < x2_2 && x1_2 > x2_1 && y1_1 < y2_2 && y1_2 > y2_1;
 }
 
 //
@@ -373,42 +400,52 @@ class SpaceShip {
 
     this.domReference = $(elementID).clone();
     this.domReference
-      .appendTo(gameBoard.$gamePlaySection)
+      .appendTo(gameBoard.domReference)
       .css("transition", "none");
   }
 
   updatePosition(timeStamp, lastKeyFrame, xMovement, yMovement) {
-    let xPosition = parseInt($(this.domReference).css("left"), 10);
-    let yPosition = parseInt($(this.domReference).css("bottom"), 10);
+    let xPosition = getXPosition(this);
+    let yPosition = getYPosition(this);
 
     xPosition -= this.speed * xMovement * (timeStamp / lastKeyFrame);
     yPosition += this.speed * yMovement * (timeStamp / lastKeyFrame);
 
+    if(this instanceof Player){
+      //perform a reset if the movement will exceed the game borders.
+      if((xPosition + this.domReference.width() ) > gameBoard.domReference.width() || xPosition <= 0){
+        xPosition += this.speed * xMovement * (timeStamp / lastKeyFrame);
+      }
+
+      if((yPosition + this.domReference.height()) > gameBoard.domReference.height() || yPosition <=0) {
+        yPosition -= this.speed * yMovement * (timeStamp / lastKeyFrame);
+      }
+    }
     $(this.domReference)
       .css("bottom", `${yPosition}px`)
       .css("left", `${xPosition}px`);
   }
 
   fire() {
-    if(this instanceof Player) {
+    if (this instanceof Player) {
       gameBoard.playerAmmo.push(new Ammo(this));
     } else if (this instanceof Enemy) {
       gameBoard.enemyAmmo.push(new Ammo(this));
     }
   }
 
-  takeDmage(dmg){
+  takeDmage(dmg) {
     this.hp -= dmg;
-    if(this.hp <= 0) {
+    if (this.hp <= 0) {
       this.destroy();
     }
   }
 
-  destroy(){
-    if(this instanceof Enemy) {
+  destroy() {
+    if (this instanceof Enemy) {
       removeObject(this, gameBoard.arrEnemies);
-    } else if (this instanceof Player){
-      gameBoard.switchScreen('#screen-game-over');
+    } else if (this instanceof Player) {
+      gameBoard.switchScreen("#screen-game-over");
     }
   }
 }
@@ -424,8 +461,8 @@ class Player extends SpaceShip {
 
     super(elementID, ammoElementId, speed, hp, def, atk);
     //place the player at the bottom center
-    const leftOffset =
-      gameBoard.$gamePlaySection.width() / 2 - this.domReference.width() / 2;
+    const leftOffset = 
+      getCenterXPosition(gameBoard) - getCenterXPosition(this);
     this.domReference.css("left", `${leftOffset}px`).css("bottom", `0px`);
   }
 }
@@ -441,15 +478,15 @@ class Drone extends Enemy {
     const elementID = "#drone-spaceship";
     const ammoElementId = "#drone-ammo";
     const speed = 2;
-    const hp = 10;
+    const hp = 100;
     const def = 5;
     const atk = 2;
 
     super(elementID, ammoElementId, speed, hp, def, atk);
     //place the drone at a random location
     const leftOffset =
-      gameBoard.$gamePlaySection.width() / 2 - this.domReference.width() / 2;
-    this.domReference.css("left", `50%`).css("bottom", `100%`);
+      getRandomNumber(20, gameBoard.domReference.width()) - this.domReference.width() / 2;
+    this.domReference.css("left", `${leftOffset}px`).css("bottom", `100%`);
   }
 }
 
@@ -460,14 +497,16 @@ class Ammo {
     this.speed = objSpaceShip.speed;
 
     this.domReference = $(objSpaceShip.ammoElementId).clone();
-    this.domReference
-      .appendTo(gameBoard.$gamePlaySection);
+    this.domReference.appendTo(gameBoard.domReference)
+      .css("transition", "none");
 
-    const xPosition = parseInt($(objSpaceShip.domReference).css("left"), 10);
-    const yPosition = parseInt($(objSpaceShip.domReference).css("bottom"), 10);
+    let botomAdjust = objSpaceShip.domReference.height() / 2;
+    if(objSpaceShip instanceof Enemy) {
+      botomAdjust *= -1;
+    }
 
-    const leftOffset = objSpaceShip.domReference.width() / 2 + xPosition;
-    const bottomOffset = objSpaceShip.domReference.height() / 2 + yPosition;
+    const leftOffset = getCenterXPosition(objSpaceShip) - this.domReference.width() / 2;
+    const bottomOffset = getYPosition(objSpaceShip) + botomAdjust;
 
     this.domReference
       .css("left", `${leftOffset}px`)
@@ -475,8 +514,14 @@ class Ammo {
   }
 
   updatePosition(lastKeyFrame, timeStamp) {
+    let multiplier = 2;
+
+    if(!this.fromPlayer){
+      multiplier *= -1;
+    }
+
     let yPosition = parseInt($(this.domReference).css("bottom"), 10);
-    yPosition += this.speed * 2 *(timeStamp / lastKeyFrame);
+    yPosition += this.speed * multiplier * (timeStamp / lastKeyFrame);
 
     $(this.domReference).css("bottom", `${yPosition}px`);
   }
