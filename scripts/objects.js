@@ -1,5 +1,11 @@
-import {gameBoard} from './gameboard.js';
-import { getCenterXPosition, getRandomNumber, getYPosition, getXPosition, removeObject } from './utils.js';
+import { gameBoard } from "./gameboard.js";
+import {
+  getCenterXPosition,
+  getRandomNumber,
+  getYPosition,
+  getXPosition,
+  removeObject,
+} from "./utils.js";
 //
 //Game object classes
 export class SpaceShip {
@@ -11,9 +17,7 @@ export class SpaceShip {
     this.ammoElementId = ammoElementId;
 
     this.domReference = $(elementID).clone();
-    this.domReference
-      .appendTo(gameBoard.domReference)
-      .css("transition", "none");
+    this.domReference.appendTo(gameBoard.domReference);
   }
 
   updatePosition(timeStamp, lastKeyFrame, xMovement, yMovement) {
@@ -117,10 +121,7 @@ export class Ammo {
     this.speed = objSpaceShip.speed;
 
     this.domReference = $(objSpaceShip.ammoElementId).clone();
-    this.domReference
-      .appendTo(gameBoard.domReference)
-      .css("transition", "none");
-
+    this.domReference.appendTo(gameBoard.domReference);
     let botomAdjust = objSpaceShip.domReference.height() / 2;
     if (objSpaceShip instanceof Enemy) {
       botomAdjust *= -1;
