@@ -1,4 +1,6 @@
-@charset "utf-8";
+@use 'animation' as *;
+@use 'flight-path-anim' as *;
+
 
 /* CSS Reset */
 html {
@@ -7,10 +9,10 @@ html {
 
 *,
 *:before,
-*:after {
+*:after { 
     box-sizing: inherit;
 }
-
+s
 body {
     position: relative;
     min-height: 100vh;
@@ -143,4 +145,13 @@ body {
 #player-ammo {
     width: 3%;
     height: auto;
+}
+
+.div-header-item {
+    color: rgb(0, 44, 59);
+    text-shadow: 
+    -1px -1px 0 rgb(88, 213, 255),  /* Top-left shadow */
+     1px -1px 0 rgb(88, 213, 255),  /* Top-right shadow */
+    -1px  1px 0 rgb(88, 213, 255),  /* Bottom-left shadow */
+     1px  1px 0 rgb(88, 213, 255);  /* Bottom-right shadow */
 }
