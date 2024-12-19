@@ -28,6 +28,8 @@ export const gameBoard = {
     startGame() {
       this.playerName = $("#input-player-name").val();
       this.isRunning = true;
+      this.score = 0;
+      this.addScore(0);
       // console.log(`Game Started: Welcome ${this.playerName}!`);
   
       this.addGameObject("#player-spaceship");
@@ -47,7 +49,8 @@ export const gameBoard = {
     },
   
     quitGame() {
-      this.isRunning = true;
+      gameBoard.domReference.clear();
+      this.isRunning = false;
       console.log(`Game Quit`);
     },
   
@@ -65,6 +68,11 @@ export const gameBoard = {
         this.difficultyOptions[this.diffifucltyIndex]
       );
     },
+
+    addScore(score){
+      this.score += score;
+      $("#div-score").text(this.score);
+    },
   
     addGameObject(elementID, xPostiion, yPosition) {
       if (elementID === "#player-spaceship") {
@@ -78,6 +86,17 @@ export const gameBoard = {
       if (screenID !== "#screen-pause") {
         $(".div-screen").hide();
       }
+
+      //perform cleanup of play screen when going to main screen
+      if (screenID === "#screen-main") {
+        $("#screen-play")
+          .children()
+          .each(function () {
+            // Removes each child element
+            $(this).remove();
+          });
+      }
+
       $(screenID).show();
       this.activeScreen = screenID;
       this.updateHeader();

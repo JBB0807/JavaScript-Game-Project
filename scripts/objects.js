@@ -12,6 +12,7 @@ export class SpaceShip {
   constructor(elementID, ammoElementId, speed, hp, def, atk) {
     this.speed = speed;
     this.hp = hp;
+    this.totalDamage = 0;
     this.def = def;
     this.atk = atk;
     this.ammoElementId = ammoElementId;
@@ -59,9 +60,18 @@ export class SpaceShip {
   }
 
   takeDmage(dmg) {
-    this.hp -= dmg;
-    if (this.hp <= 0) {
+    this.totalDamage += dmg;
+
+    if(this instanceof Enemy){
+      gameBoard.addScore(dmg);
+    }
+    
+    if (this.totalDamage > this.hp) {
       this.destroy();
+
+      if(this instanceof Enemy){
+        gameBoard.addScore(this.hp);
+      }
     }
   }
 
