@@ -127,6 +127,8 @@ body {
 .drone {
     width: 10%;
     height: auto;
+    animation: move-to-bottom 15s linear;
+    animation-play-state: running;
 }
 
 #screen-play{
@@ -140,11 +142,15 @@ body {
 #drone-ammo {
     width: 5%;
     height: auto;
+    animation: move-to-bottom 10s linear;
+    animation-play-state: running;
 }
 
 #player-ammo {
     width: 3%;
     height: auto;
+    animation: move-to-top 4.5s linear;
+    animation-play-state: running;
 }
 
 .div-header-item {

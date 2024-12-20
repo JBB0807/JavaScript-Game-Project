@@ -11,3 +11,31 @@
         transform: rotate(359deg);
     }
 }
+
+
+.background-animation {
+    animation: background-movement 240s linear;
+    animation-play-state: paused;
+}
+
+@keyframes background-movement {
+    0%{
+        background-position: 0% 100%;
+    }
+
+    100%{
+        background-position: 0% 0%;
+    }
+}
+
+@keyframes move-to-bottom {
+    100% {
+        bottom: (-2000px);
+    }
+}
+
+@keyframes move-to-top {
+    100% {
+        bottom: (2000px);
+    }
+}

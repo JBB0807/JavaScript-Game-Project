@@ -33,6 +33,7 @@ export const gameBoard = {
       // console.log(`Game Started: Welcome ${this.playerName}!`);
   
       this.addGameObject("#player-spaceship");
+      this.domReference.css('animation-play-state', 'running');
   
       gameBoardEventHandler.activateGameLoop();
       //
@@ -40,6 +41,7 @@ export const gameBoard = {
   
     pauseGame() {
       this.isRunning = false;
+      this.domReference.css('animation-play-state', 'paused');
       console.log(`Game Paused`);
     },
   
@@ -81,6 +83,22 @@ export const gameBoard = {
         this.arrEnemies.push(new Drone());
       }
     },
+
+    cleanupPlayScreen(){
+      this.objPlayer = null,
+      this.arrProps.splice(0, this.arrProps.length),
+      this.arrEnemies.splice(0, this.arrEnemies.length),
+      this.arrObstacles.splice(0, this.arrObstacles.length),
+      this.playerAmmo.splice(0, this.playerAmmo.length),
+      this.enemyAmmo.splice(0, this.enemyAmmo.length),
+
+      $("#screen-play")
+          .children()
+          .each(function () {
+            // Removes each child element
+            $(this).remove();
+          });
+    },
   
     switchScreen(screenID) {
       if (screenID !== "#screen-pause") {
@@ -88,13 +106,8 @@ export const gameBoard = {
       }
 
       //perform cleanup of play screen when going to main screen
-      if (screenID === "#screen-main") {
-        $("#screen-play")
-          .children()
-          .each(function () {
-            // Removes each child element
-            $(this).remove();
-          });
+      if (screenID === "#screen-main" || screenID === "#screen-game-over") {
+        this.cleanupPlayScreen();
       }
 
       $(screenID).show();
