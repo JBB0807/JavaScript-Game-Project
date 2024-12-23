@@ -53,8 +53,8 @@ export const gameBoardEventHandler = {
       ) {
         gameBoardEventHandler.updatePlayerMovement(highResTimestamp);
   
-        gameBoardEventHandler.updateAmmoPosition(highResTimestamp);
-        gameBoardEventHandler.updateEnemyMovement(highResTimestamp);
+        // gameBoardEventHandler.updateAmmoPosition(highResTimestamp);
+        // gameBoardEventHandler.updateEnemyMovement(highResTimestamp);
         gameBoardEventHandler.firePlayerAmmo(highResTimestamp);
         gameBoardEventHandler.objectCleanup();
         gameBoardEventHandler.detectCollision();
@@ -151,7 +151,7 @@ export const gameBoardEventHandler = {
   
     detectCollision() {
       //
-      //detect player ammo against enemies
+      //detect collision between player ammo and enemies
       gameBoard.playerAmmo.forEach((ammo) => {
         gameBoard.arrEnemies.forEach((enemy) => {
           if (isOverlapping(ammo, enemy)) {
@@ -161,6 +161,8 @@ export const gameBoardEventHandler = {
         });
       });
   
+      //
+      //detect collision between player ship and enemies
       gameBoard.arrEnemies.forEach((enemy) => {
         if (isOverlapping(enemy, gameBoard.objPlayer)) {
           enemy.takeDmage(gameBoard.objPlayer.atk);
@@ -168,6 +170,8 @@ export const gameBoardEventHandler = {
         }
       });
   
+      //
+      //detect collision between player ship and enemy ammo
       gameBoard.enemyAmmo.forEach((ammo) => {
         if (isOverlapping(ammo, gameBoard.objPlayer)) {
           gameBoard.objPlayer.takeDmage(ammo.damage);

@@ -115,7 +115,7 @@ body {
     justify-content: center;
 }
 
-.div-game-object, .ammo {
+.div-game-object {
     position: absolute;
 }
 
@@ -127,6 +127,7 @@ body {
 .drone {
     width: 10%;
     height: auto;
+    animation: move-to-bottom 15s linear;
 }
 
 #screen-play{
@@ -137,17 +138,23 @@ body {
     background-color: rgba(0, 0, 0, 0.212);
 }
 
+#screen-pause{
+    background-color: rgba(124, 92, 92, 0.463);
+}
+
 #drone-ammo {
     width: 5%;
     height: auto;
+    animation: move-to-bottom 10s linear, rotatefull 1.5s linear infinite;
 }
 
 #player-ammo {
     width: 3%;
     height: auto;
+    animation: move-to-top 4.5s linear;
 }
 
-.div-header-item {
+.high-vis-font {
     color: rgb(0, 44, 59);
     text-shadow: 
     -1px -1px 0 rgb(88, 213, 255),  /* Top-left shadow */
