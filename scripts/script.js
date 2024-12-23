@@ -18,17 +18,11 @@ function setupListeners() {
     if ($(this).hasClass("switch-screen-play")) {
       console.log("Switch to play screen");
       gameBoard.switchScreen("#screen-play");
-      if (elementId === "menu-start-game") {
-        gameBoard.startGame();
-      } else if (elementId === "menu-resume") {
-        gameBoard.resumeGame();
-      }
     } else if ($(this).hasClass("switch-screen-main")) {
       console.log("Switch to main screen");
       gameBoard.switchScreen("#screen-main");
     } else if ($(this).hasClass("switch-screen-pause")) {
       console.log("Switch to pause screen");
-      gameBoard.pauseGame();
       gameBoard.switchScreen("#screen-pause");
     } else if ($(this).hasClass("switch-screen-credits")) {
       console.log("Switch to credits screen");
