@@ -2,6 +2,8 @@
 
 import {gameBoard} from './gameboard.js';
 import {gameBoardEventHandler} from './gameBoardEventHandler.js';
+import {enableAudio,audioContext} from "./soundManager.js"
+
 
 $(document).ready(function () {
   gameBoard.init();
@@ -13,8 +15,10 @@ $(document).ready(function () {
 function setupListeners() {
   //
   //on click listener for all menu items that will trigger a screen to change
-  $(".div-screen-select").on("click", function () {
+  $(".div-screen-select").on("click", function () {    
     var elementId = $(this).attr("id");
+    
+    enableAudio();
     if ($(this).hasClass("switch-screen-play")) {
       console.log("Switch to play screen");
       gameBoard.switchScreen("#screen-play");
