@@ -6,6 +6,7 @@ import {
   getXPosition,
   removeObject,
 } from "./utils.js";
+import {playLaserSound} from "./soundManager.js"
 //
 //Game object classes
 export class SpaceShip {
@@ -54,6 +55,7 @@ export class SpaceShip {
   fire() {
     if (this instanceof Player) {
       gameBoard.playerAmmo.push(new Ammo(this));
+      playLaserSound();
     } else if (this instanceof Enemy) {
       gameBoard.enemyAmmo.push(new Ammo(this));
     }
