@@ -1,3 +1,6 @@
+"use strict";
+
+
 import { gameBoard } from "./gameboard.js";
 import {
   getCenterXPosition,
@@ -6,7 +9,7 @@ import {
   getXPosition,
   removeObject,
 } from "./utils.js";
-import {playLaserSound} from "./soundManager.js"
+import {playPlayerLaserSound, playDroneLaserSound} from "./soundManager.js"
 //
 //Game object classes
 export class SpaceShip {
@@ -55,7 +58,6 @@ export class SpaceShip {
   fire() {
     if (this instanceof Player) {
       gameBoard.playerAmmo.push(new Ammo(this));
-      playLaserSound();
     } else if (this instanceof Enemy) {
       gameBoard.enemyAmmo.push(new Ammo(this));
     }
@@ -100,6 +102,11 @@ export class Player extends SpaceShip {
     const leftOffset = getCenterXPosition(gameBoard) - getCenterXPosition(this);
     this.domReference.css("left", `${leftOffset}px`).css("bottom", `0px`);
   }
+
+  fire(){
+    playPlayerLaserSound();
+    super.fire();
+  }
 }
 
 export class Enemy extends SpaceShip {
@@ -123,6 +130,11 @@ export class Drone extends Enemy {
       getRandomNumber(20, gameBoard.domReference.width()) -
       this.domReference.width() / 2;
     this.domReference.css("left", `${leftOffset}px`).css("bottom", `100%`);
+  }
+
+  fire(){
+    playDroneLaserSound();
+    super.fire();
   }
 }
 

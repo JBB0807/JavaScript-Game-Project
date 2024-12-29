@@ -1,5 +1,8 @@
+"use strict";
+
 import {gameBoard} from './gameboard.js';
 import {isOverlapping, removeObject} from './utils.js'
+import {stageManager} from './stageManager.js'
 
 export const gameBoardEventHandler = {
     activeKeys: [],
@@ -42,19 +45,26 @@ export const gameBoardEventHandler = {
       if (!gameBoard.isRunning) {
         return;
       }
+
+      // if(getGBMusicTime() >= 64.491 && !gameBoardEventHandler.musicLoop){
+      //   console.log("Enter first loop");
+      //   gameBoardEventHandler.musicLoop = true;
+      //   loopFistDrop();
+      // }
   
       if (gameBoardEventHandler.keyframe === null) {
         gameBoardEventHandler.keyframe = highResTimestamp;
       }
+
+      stageManager.stageCheck(highResTimestamp - gameBoardEventHandler.keyframe); 
   
       if (
         highResTimestamp - gameBoardEventHandler.keyframe >
         gameBoardEventHandler.targetFrameRate
       ) {
+
         gameBoardEventHandler.updatePlayerMovement(highResTimestamp);
   
-        // gameBoardEventHandler.updateAmmoPosition(highResTimestamp);
-        // gameBoardEventHandler.updateEnemyMovement(highResTimestamp);
         gameBoardEventHandler.firePlayerAmmo(highResTimestamp);
         gameBoardEventHandler.objectCleanup();
         gameBoardEventHandler.detectCollision();
@@ -71,17 +81,6 @@ export const gameBoardEventHandler = {
   
       gameBoardEventHandler.requestAnimationFrameID =
         window.requestAnimationFrame(gameBoardEventHandler.checkKeyFrame);
-    },
-  
-    updateEnemyMovement(highResTimestamp) {
-      gameBoard.arrEnemies.forEach((enemy) => {
-        enemy.updatePosition(
-          highResTimestamp,
-          this.keyframe,
-          0,
-          -1
-        );
-      });
     },
   
     updatePlayerMovement(highResTimestamp) {
@@ -126,21 +125,13 @@ export const gameBoardEventHandler = {
           highResTimestamp - this.playerFireKeyFrame >
           this.playerFiringRate
         ) {
-          gameBoard.objPlayer.fire();
+          gameBoard.objPlayer?.fire();
+          if(this.musicLoop){
+            this.musicLoop = false;
+          }
           this.playerFireKeyFrame = highResTimestamp;
         }
       }
-    },
-  
-    updateAmmoPosition(highResTimestamp) {
-      gameBoard.playerAmmo.forEach((ammo) => {
-        ammo.updatePosition(this.keyframe, highResTimestamp);
-      });
-  
-      gameBoard.enemyAmmo.forEach((ammo) => {
-        ammo.updatePosition(this.keyframe, highResTimestamp);
-      });
-  
     },
   
     objectCleanup() {
