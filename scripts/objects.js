@@ -1,3 +1,6 @@
+"use strict";
+
+
 import { gameBoard } from "./gameboard.js";
 import {
   getCenterXPosition,

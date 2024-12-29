@@ -1,3 +1,5 @@
+"use strict";
+
 //
 //Utility functions
 export function getRandomNumber(min, max) {

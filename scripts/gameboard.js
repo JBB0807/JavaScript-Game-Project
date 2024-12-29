@@ -3,7 +3,7 @@
 import { gameBoardEventHandler } from "./gameBoardEventHandler.js";
 import { getXPosition, getYPosition, removeObject } from "./utils.js";
 import { SpaceShip, Player, Enemy, Drone, Ammo } from "./objects.js";
-import {playgamePlaySound} from "./soundManager.js";
+import {playBGSound, stopAudio} from "./soundManager.js";
 
 export const gameBoard = {
   playerName: null,
@@ -34,7 +34,7 @@ export const gameBoard = {
 
     this.resumeGame()
 
-    playgamePlaySound();
+    playBGSound();
   },
 
   resumeGame() {
@@ -56,7 +56,7 @@ export const gameBoard = {
   },
 
   quitGame() {
-    gameBoard.domReference.clear();
+    stopAudio();
     this.isRunning = false;
     console.log(`Game Quit`);
   },
@@ -116,9 +116,10 @@ export const gameBoard = {
         }
       }
 
-      //perform cleanup of play screen when going to main screen
-      if (screenID === "#screen-main" || screenID === "#screen-game-over") {
+      //perform cleanup of play screen when going to main screen or the game over
+      if ((this.activeScreen === "#screen-pause" && screenID === "#screen-main") || screenID === "#screen-game-over") {
         this.cleanupPlayScreen();
+        this.quitGame();
       }
     }
 
