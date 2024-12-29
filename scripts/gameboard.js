@@ -3,6 +3,7 @@
 import { gameBoardEventHandler } from "./gameBoardEventHandler.js";
 import { getXPosition, getYPosition, removeObject } from "./utils.js";
 import { SpaceShip, Player, Enemy, Drone, Ammo } from "./objects.js";
+import {playgamePlaySound} from "./soundManager.js";
 
 export const gameBoard = {
   playerName: null,
@@ -32,6 +33,8 @@ export const gameBoard = {
     this.addGameObject("#player-spaceship");
 
     this.resumeGame()
+
+    playgamePlaySound();
   },
 
   resumeGame() {

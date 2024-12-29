@@ -126,7 +126,7 @@ export const gameBoardEventHandler = {
           highResTimestamp - this.playerFireKeyFrame >
           this.playerFiringRate
         ) {
-          gameBoard.objPlayer.fire();
+          gameBoard.objPlayer?.fire();
           this.playerFireKeyFrame = highResTimestamp;
         }
       }
