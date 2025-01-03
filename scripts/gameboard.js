@@ -19,7 +19,7 @@ export const gameBoard = {
   diffifucltyIndex: 1,
   isRunning: false,
   activeScreen: null,
-  domReference: $("#screen-play"),
+  domReference: $("#div-game-board"),
 
   init() {
     this.switchScreen("#screen-main");
@@ -82,7 +82,7 @@ export const gameBoard = {
   addGameObject(elementID, xPostiion, yPosition) {
     if (elementID === "#player-spaceship") {
       this.objPlayer = new Player();
-    } else if (elementID === "#drone-spaceship") {
+    } else if (elementID === "#drone-container") {
       this.arrEnemies.push(new Drone());
     }
   },
@@ -94,7 +94,7 @@ export const gameBoard = {
       this.arrObstacles.splice(0, this.arrObstacles.length),
       this.playerAmmo.splice(0, this.playerAmmo.length),
       this.enemyAmmo.splice(0, this.enemyAmmo.length),
-      $("#screen-play")
+      $(this.domReference)
         .children()
         .each(function () {
           // Removes each child element

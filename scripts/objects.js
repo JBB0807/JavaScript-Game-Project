@@ -1,6 +1,5 @@
 "use strict";
 
-
 import { gameBoard } from "./gameboard.js";
 import {
   getCenterXPosition,
@@ -9,9 +8,59 @@ import {
   getXPosition,
   removeObject,
 } from "./utils.js";
-import {playPlayerLaserSound, playDroneLaserSound} from "./soundManager.js"
+import { playPlayerLaserSound, playDroneLaserSound } from "./soundManager.js";
 //
 //Game object classes
+
+class Swarm {
+  domReference;
+  animation;
+
+  spawnRate = 500;
+  lastSpawnTime = 0;
+  currentSpawnCount = 0;
+  spawnSize = 10;
+
+  //number of object to be spawned at the same time
+  groupCountPerSpawn = 1;
+
+  //define to give swarm a fixed position to start
+  xOrigin;
+  yOrigin;
+
+  //incremental position if objects are spawned in a group
+  groupIncrementX;
+  groupIncrementY;
+
+  //for randomized positions
+  xRandomMin;
+  xRandomMax;
+  yRandomMin;
+  yRandomMax;
+
+  addObject(highResTimestamp) {
+    this.lastSpawnTime = highResTimestamp;
+
+    //add onjects here
+  }
+
+  check(highResTimestamp) {
+
+    if(lastSpawnTime === null){
+      this.lastSpawnTime = highResTimestamp;
+    }
+
+    if(highResTimestamp - this.lastSpawnTime >= this.spawnRate){
+      this.addObject(highResTimestamp);
+    }
+  }
+
+  onPause(){
+    this.lastSpawnTime = null;
+  }
+
+}
+
 export class SpaceShip {
   constructor(elementID, ammoElementId, speed, hp, def, atk) {
     this.speed = speed;
@@ -23,6 +72,7 @@ export class SpaceShip {
 
     this.domReference = $(elementID).clone();
     this.domReference.appendTo(gameBoard.domReference);
+
   }
 
   updatePosition(timeStamp, lastKeyFrame, xMovement, yMovement) {
@@ -66,17 +116,34 @@ export class SpaceShip {
   takeDmage(dmg) {
     this.totalDamage += dmg;
 
-    if(this instanceof Enemy){
+    if (this instanceof Enemy) {
       gameBoard.addScore(dmg);
     }
-    
+
     if (this.totalDamage > this.hp) {
       this.destroy();
 
-      if(this instanceof Enemy){
+      if (this instanceof Enemy) {
         gameBoard.addScore(this.hp);
       }
+    } else {
+      //instead of destroying just update the hp bar
+      this.updateHPBar();
     }
+  }
+
+  updateHPBar(){
+    const remainingPct = 100 * ( (this.hp - this.totalDamage) / this.hp); 
+
+    let dom;
+    if(this instanceof Player){
+      dom = $('#player-hp');
+    } else if(this instanceof Drone){
+      dom = this.domReference.find('.drone-hp');
+    }
+
+    dom?.css("width", `${remainingPct}%`);
+
   }
 
   destroy() {
@@ -96,17 +163,18 @@ export class Player extends SpaceShip {
     const hp = 100;
     const def = 10;
     const atk = 10;
-
+    
     super(elementID, ammoElementId, speed, hp, def, atk);
     //place the player at the bottom center
     const leftOffset = getCenterXPosition(gameBoard) - getCenterXPosition(this);
     this.domReference.css("left", `${leftOffset}px`).css("bottom", `0px`);
   }
 
-  fire(){
+  fire() {
     playPlayerLaserSound();
     super.fire();
   }
+
 }
 
 export class Enemy extends SpaceShip {
@@ -116,8 +184,8 @@ export class Enemy extends SpaceShip {
 }
 
 export class Drone extends Enemy {
-  constructor() {
-    const elementID = "#drone-spaceship";
+  constructor(isPartOfSwarm = false, x, y) {
+    const elementID = "#drone-container";
     const ammoElementId = "#drone-ammo";
     const speed = 2;
     const hp = 100;
@@ -125,14 +193,21 @@ export class Drone extends Enemy {
     const atk = 2;
 
     super(elementID, ammoElementId, speed, hp, def, atk);
-    //place the drone at a random location
-    const leftOffset =
-      getRandomNumber(20, gameBoard.domReference.width()) -
-      this.domReference.width() / 2;
-    this.domReference.css("left", `${leftOffset}px`).css("bottom", `100%`);
+
+    const leftOffset = x
+      ? x
+      : `${
+          getRandomNumber(20, gameBoard.domReference.width()) -
+          this.domReference.width() / 2
+        }px`;
+
+    const bottomOffset = y ? y : "100%";
+
+    this.isPartOfSwarm = isPartOfSwarm;
+    this.domReference.css("left", leftOffset).css("bottom", bottomOffset);
   }
 
-  fire(){
+  fire() {
     playDroneLaserSound();
     super.fire();
   }

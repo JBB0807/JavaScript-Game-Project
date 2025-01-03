@@ -32,6 +32,10 @@
             </div>
         </div>
         <div class="div-screen background-animation" id="screen-play">
+            <div id="container-player-hp">            
+                <div id="player-hp"></div>
+            </div>
+            <div id="div-game-board"></div>
         </div>
         <div class="div-screen" id="screen-pause">
             <div class="div-title" id="pause-title">Paused</div>
@@ -55,7 +59,10 @@
         </div>
         <div class="div-screen div-game-object-containers">
             <img class="div-game-object" id="player-spaceship" src="./images/player-1.webp"/>
-            <img class="div-game-object enemy drone" id="drone-spaceship" src="./images/drone1.webp"/>
+            <div class="div-game-object enemy" id="drone-container">
+                <div class="drone-hp"></div>
+                <img class="img-drone" id="drone-spaceship" src="./images/drone1.webp"/>
+            </div>
             <img class="div-game-object ammo" id="player-ammo" src="./images/player-ammo.webp"/>
             <img class="div-game-object ammo" id="drone-ammo" src="./images/drone-ammo.webp"/>
         </div>
