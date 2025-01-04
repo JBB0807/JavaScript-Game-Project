@@ -29,6 +29,10 @@ export const gameBoardEventHandler = {
         // console.log(`Active kyes: ${this.activeKeys}`);
       }
     },
+
+    clearKeys(){
+      this.activeKeys.splice(0, this.activeKeys.length); 
+    },
   
     activateGameLoop() {
       this.requestAnimationFrameID =

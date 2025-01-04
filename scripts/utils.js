@@ -5,13 +5,27 @@
 export function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
-
+ 
 export function getXPosition(obj) {
-  return parseInt($(obj.domReference).css("left"), 10);
+    const matrix = $(obj.domReference).css('transform').split(',');
+    let x = matrix[4];
+
+    if(x === undefined){
+      x = 0;
+    }
+
+  return parseInt($(obj.domReference).css("left"), 10) + parseInt(x, 10); 
 }
 
 export function getYPosition(obj) {
-  return parseInt($(obj.domReference).css("bottom"), 10);
+  const matrix = $(obj.domReference).css('transform').split(',');
+  let y = matrix[5];
+
+  if(y === undefined){
+    y = 0;
+  }
+
+  return parseInt($(obj.domReference).css("bottom"), 10) - parseInt(y, 10);
 }
 
 export function getCenterXPosition(obj) {

@@ -15,27 +15,32 @@
 </head>
 
 <body>
-    <div class="div-game-board">
+    <div class="div-game-container">
         <div>
             <!-- <audio id="bgMusicPlayer" src="./sounds/space-background.mp3" preload="auto"></audio> -->
+        </div>
+        <div class="div-screen" id="screen-loading">
+            <div>Loading</div>
         </div>
         <div class="div-screen" id="screen-main">
             <div class="div-title" id="game-title">MARQUEE</div>
             <div class="div-menu" id="main-menu">
                 <input id="input-player-name" type="text" placeholder="Enter Player Name">
+
                 <div id="difficulty-selector">
-                    <div class="clickable" id="difficulty-adjust-left"><</div>
+                    <div class="clickable" id="difficulty-adjust-left">&lt;</div>
                     <div id="difficulty-level-display">Difficulty</div>
-                    <div class="clickable" id="difficulty-adjust-right">></div>
+                    <div class="clickable" id="difficulty-adjust-right">&gt;</div>
                 </div>
                 <div class="clickable div-screen-select switch-screen-play" id="menu-start-game">Start Game</div>
             </div>
         </div>
-        <div class="div-screen background-animation" id="screen-play">
-            <div id="container-player-hp">            
+        <div class="div-screen" id="screen-play">
+            <div id="container-player-hp">
+                <div id="player-name" class="high-vis-font">Player Name</div>
                 <div id="player-hp"></div>
             </div>
-            <div id="div-game-board"></div>
+            <div class="background-animation" id="div-game-board"></div>
         </div>
         <div class="div-screen" id="screen-pause">
             <div class="div-title" id="pause-title">Paused</div>
@@ -58,26 +63,68 @@
             </div>
         </div>
         <div class="div-screen div-game-object-containers">
-            <img class="div-game-object" id="player-spaceship" src="./images/player-1.webp"/>
+            <img class="div-game-object" id="player-spaceship" src="./images/player-1.webp" />
             <div class="div-game-object enemy" id="drone-container">
                 <div class="drone-hp"></div>
-                <img class="img-drone" id="drone-spaceship" src="./images/drone1.webp"/>
+                <img class="img-drone" id="drone-spaceship" src="./images/drone1.webp" />
             </div>
-            <img class="div-game-object ammo" id="player-ammo" src="./images/player-ammo.webp"/>
-            <img class="div-game-object ammo" id="drone-ammo" src="./images/drone-ammo.webp"/>
+            <img class="div-game-object ammo" id="player-ammo" src="./images/player-ammo.webp" />
+            <img class="div-game-object ammo" id="drone-ammo" src="./images/drone-ammo.webp" />
         </div>
         <div class="div-header">
             <div id="left-header">
-                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-credits" id="header-item-credits">Credits</div>
+                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-credits"
+                    id="header-item-credits">Credits</div>
                 <div class="div-header-item high-vis-font" id="header-item-score">
                     <div>Score: </div>
                     <div id="div-score"></div>
                 </div>
             </div>
             <div id="right-header">
-                <div class="clickable div-header-item high-vis-font" id="header-item-help">help</div>
-                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-pause" id="header-item-pause">pause</div>
+                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-help" 
+                    id="header-item-help">help</div>
+                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-pause"
+                    id="header-item-pause">pause</div>
                 <div class="clickable div-header-item high-vis-font" id="header-item-sound">Sound</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-help" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Flight Manual</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Use W,S,A,D or arrow keys to move.
+                    <br>Press spacebar to fire.
+                    <br>Press esc to pause.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-name-alert" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Alert</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Enter your player name.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>

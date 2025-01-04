@@ -1,7 +1,6 @@
 "use strict";
 
-const audioContext = new (window.AudioContext ||
-  window.webkitAudioContext)();
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 //
 // Sound setup for background music
@@ -9,10 +8,11 @@ const audioContext = new (window.AudioContext ||
 //       - loop at 48.474 64.491
 //
 //
-const bgAudioContext = new (window.AudioContext ||
-  window.webkitAudioContext)();
-let bgMusicXBuffer = await fetchData(bgAudioContext, "./sounds/space-background.mp3");
-let bgMusicGN = createGain(bgAudioContext, 0.7); // Set the volume
+const bgAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+//buffer and gain to be fetched on fetchAudioBuffer()
+let bgMusicXBuffer;
+let bgMusicGN;
 let bgMusicBFSource;
 
 export function playBGSound() {
@@ -22,19 +22,19 @@ export function playBGSound() {
 }
 
 export function loopFirstDrop() {
-  if(bgMusicBFSource === null) return;
+  if (bgMusicBFSource === null) return;
 
   console.log("first loop");
-  bgMusicBFSource.loop = true; 
-  bgMusicBFSource.loopStart  = 47.49;
+  bgMusicBFSource.loop = true;
+  bgMusicBFSource.loopStart = 47.49;
   bgMusicBFSource.loopEnd = 63.49;
 }
 
 export function endBGMusicLoop() {
-  if(bgMusicBFSource === null) return;
+  if (bgMusicBFSource === null) return;
   console.log("end loop");
 
-  bgMusicBFSource.loop = false; 
+  bgMusicBFSource.loop = false;
 }
 
 // END - Sound setup for background music
@@ -43,8 +43,10 @@ export function endBGMusicLoop() {
 //
 // Sound setup for player ammo sfx
 //
-let playerAmmoSFXBuffer = await fetchData(audioContext, "./sounds/player-ammo-sfx.wav");
-let playerAmmoGN = createGain(audioContext, 0.2); // Set the volume
+
+  //buffer and gain to be fetched on fetchAudioBuffer()
+let playerAmmoSFXBuffer;
+let playerAmmoGN;
 
 export function playPlayerLaserSound() {
   if (!playerAmmoSFXBuffer) return;
@@ -57,8 +59,10 @@ export function playPlayerLaserSound() {
 //
 // Sound setup for drome ammo sfx
 //
-let droneAmmoSFXBuffer = await fetchData(audioContext, "./sounds/player-ammo-sfx.wav");
-let droneAmmoGN = createGain(audioContext, 0.4); // Set the volume
+
+    //buffer and gain to be fetched on fetchAudioBuffer()
+let droneAmmoSFXBuffer;
+let droneAmmoGN; // Set the volume
 
 export function playDroneLaserSound() {
   if (!droneAmmoSFXBuffer) return;
@@ -69,20 +73,19 @@ export function playDroneLaserSound() {
 //
 
 export function startAudio() {
-  audioContext.resume();
-  bgAudioContext.resume();
+  audioContext?.resume();
+  bgAudioContext?.resume();
 }
 
-export function audioOff() {
-}
+export function audioOff() {}
 
 export function pauseAudio() {
-  audioContext.pause();
-  bgAudioContext.pause();
+  audioContext?.suspend();
+  bgAudioContext?.suspend();
 }
 
 export function stopAudio() {
-  bgMusicBFSource.stop();
+  bgMusicBFSource?.stop();
 }
 
 async function fetchData(context, media) {
@@ -110,4 +113,29 @@ function playBuffer(context, buffer, gain) {
   return source;
 }
 
+export async function fetchAudioSources() {
+  // fetch sources for bachgroun music
+  bgMusicXBuffer = await fetchData(
+    bgAudioContext,
+    "./sounds/space-background.mp3"
+  );
+  bgMusicGN = createGain(bgAudioContext, 0.7); // Set the volume
+  // END -  fetch sources for bachgroun music
 
+  // fetch sources for player ammo sfx
+  playerAmmoSFXBuffer = await fetchData(
+    audioContext,
+    "./sounds/player-ammo-sfx.wav"
+  );
+  playerAmmoGN = createGain(audioContext, 0.2); // Set the volume
+  // END - fetch sources for player ammo sfx
+
+  // fetch sources for drone ammo sfx
+  droneAmmoSFXBuffer = await fetchData(
+    audioContext,
+    "./sounds/player-ammo-sfx.wav"
+  );
+  droneAmmoGN = createGain(audioContext, 0.4); // Set the volume
+  // END - fetch sources for drone ammo sfx
+
+}

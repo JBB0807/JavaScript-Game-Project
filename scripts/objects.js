@@ -73,37 +73,10 @@ export class SpaceShip {
     this.domReference = $(elementID).clone();
     this.domReference.appendTo(gameBoard.domReference);
 
+    this.updateHPBar();
   }
 
-  updatePosition(timeStamp, lastKeyFrame, xMovement, yMovement) {
-    let xPosition = getXPosition(this);
-    let yPosition = getYPosition(this);
-
-    xPosition -= this.speed * xMovement * (timeStamp / lastKeyFrame);
-    yPosition += this.speed * yMovement * (timeStamp / lastKeyFrame);
-
-    if (this instanceof Player) {
-      //perform a reset if the movement will exceed the game borders.
-      if (
-        xPosition + this.domReference.width() >
-          gameBoard.domReference.width() ||
-        xPosition <= 0
-      ) {
-        xPosition += this.speed * xMovement * (timeStamp / lastKeyFrame);
-      }
-
-      if (
-        yPosition + this.domReference.height() >
-          gameBoard.domReference.height() ||
-        yPosition <= 0
-      ) {
-        yPosition -= this.speed * yMovement * (timeStamp / lastKeyFrame);
-      }
-    }
-    $(this.domReference)
-      .css("bottom", `${yPosition}px`)
-      .css("left", `${xPosition}px`);
-  }
+  
 
   fire() {
     if (this instanceof Player) {
@@ -159,15 +132,42 @@ export class Player extends SpaceShip {
   constructor() {
     const elementID = "#player-spaceship";
     const ammoElementId = "#player-ammo";
-    const speed = 4;
+    //variable speed to make is consistent regardless of the the screen size
+    const speed = 4 * gameBoard.domReference.width() / 480;
     const hp = 100;
     const def = 10;
     const atk = 10;
     
     super(elementID, ammoElementId, speed, hp, def, atk);
     //place the player at the bottom center
-    const leftOffset = getCenterXPosition(gameBoard) - getCenterXPosition(this);
-    this.domReference.css("left", `${leftOffset}px`).css("bottom", `0px`);
+    this.domReference.css("left", `48%`).css("bottom", `0px`);
+  }
+
+  updatePosition(timeStamp, lastKeyFrame, xMovement, yMovement) {
+    let xPosition = getXPosition(this);
+    let yPosition = getYPosition(this);
+
+    xPosition -= this.speed * xMovement * (timeStamp / lastKeyFrame);
+    yPosition += this.speed * yMovement * (timeStamp / lastKeyFrame);
+
+    //perform a reset if the movement will exceed the game borders. 
+    if (
+      xPosition + this.domReference.width() > gameBoard.domReference.width() ||
+      xPosition <= 0
+    ) {
+      xPosition += this.speed * xMovement * (timeStamp / lastKeyFrame);
+    }
+
+    if (
+      yPosition + this.domReference.height() >
+        gameBoard.domReference.height() ||
+      yPosition <= 0
+    ) {
+      yPosition -= this.speed * yMovement * (timeStamp / lastKeyFrame);
+    }
+    $(this.domReference)
+      .css("bottom", `${yPosition}px`)
+      .css("left", `${xPosition}px`);
   }
 
   fire() {
@@ -179,7 +179,13 @@ export class Player extends SpaceShip {
 
 export class Enemy extends SpaceShip {
   constructor(elementID, ammoElementId, speed, hp, def, atk) {
-    super(elementID, ammoElementId, speed, hp, def, atk);
+    
+    super(elementID
+      , ammoElementId
+      , speed
+      , hp * gameBoard.getDifficultyMultiplier()
+      , def
+      , atk * gameBoard.getDifficultyMultiplier());
   }
 }
 

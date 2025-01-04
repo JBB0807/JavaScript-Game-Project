@@ -31,6 +31,9 @@ function setupListeners() {
     } else if ($(this).hasClass("switch-screen-credits")) {
       console.log("Switch to credits screen");
       gameBoard.switchScreen("#screen-credits");
+    } else if($(this).hasClass("switch-screen-help")){
+      console.log("Switch to help screen");
+      gameBoard.showHelp();
     }
   });
 
@@ -45,7 +48,11 @@ function setupListeners() {
   //
   //Keyboard Press/Release Listeners
   $(document).keydown(function (event) {
-    gameBoardEventHandler.registerKeyPress(event.key);
+    if(gameBoard.isRunning && event.key === "Escape"  ){
+      gameBoard.switchScreen("#screen-pause");
+    } else {
+      gameBoardEventHandler.registerKeyPress(event.key);
+    }
   });
 
   $(document).keyup(function (event) {

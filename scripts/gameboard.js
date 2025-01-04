@@ -3,7 +3,7 @@
 import { gameBoardEventHandler } from "./gameBoardEventHandler.js";
 import { getXPosition, getYPosition, removeObject } from "./utils.js";
 import { SpaceShip, Player, Enemy, Drone, Ammo } from "./objects.js";
-import {playBGSound, stopAudio} from "./soundManager.js";
+import {playBGSound, stopAudio, fetchAudioSources, pauseAudio} from "./soundManager.js";
 
 export const gameBoard = {
   playerName: null,
@@ -16,18 +16,26 @@ export const gameBoard = {
 
   score: null,
   difficultyOptions: ["Easy", "Normal", "Hard"],
-  diffifucltyIndex: 1,
+  diffifucltyIndex: 1, //defaults to Normal
   isRunning: false,
   activeScreen: null,
   domReference: $("#div-game-board"),
 
   init() {
+    this.switchScreen("#screen-loading");
+    fetchAudioSources();
     this.switchScreen("#screen-main");
     this.adjustDifficulty(0);
   },
 
+  getDifficultyMultiplier(){
+    //return a diffuclty multiplier by exponential increase per index(0,1,2)  , 1 = easy), 2 = easy, 4 = hard
+    return Math.pow(2, this.diffifucltyIndex);
+  },
+
   startGame() {
-    this.playerName = $("#input-player-name").val();
+    console.log("Start game");
+    $("#player-name").text(this.playerName);
     this.score = 0;
     this.addScore(0);
     this.addGameObject("#player-spaceship");
@@ -47,17 +55,21 @@ export const gameBoard = {
   },
 
   pauseGame() {
-    this.isRunning = false;
+    pauseAudio();
     this.domReference.css("animation-play-state", "paused");
     $(".ammo").css("animation-play-state", "paused");
     $(".enemy").css("animation-play-state", "paused");
+    this.isRunning = false;
     gameBoardEventHandler.deactivateGameLoop();
+    gameBoardEventHandler.clearKeys();
     console.log(`Game Paused`);
   },
 
   quitGame() {
     stopAudio();
     this.isRunning = false;
+    gameBoardEventHandler.deactivateGameLoop();
+    gameBoardEventHandler.clearKeys();
     console.log(`Game Quit`);
   },
 
@@ -106,12 +118,20 @@ export const gameBoard = {
     if (screenID === "#screen-pause") {
       this.pauseGame();
     } else {
-      $(".div-screen").hide();
 
       if (screenID === "#screen-play") {
         if (this.activeScreen === "#screen-pause") {
           this.resumeGame();
         } else if (this.activeScreen === "#screen-main") {
+          //validation of user name
+          this.playerName = $("#input-player-name").val();
+          if(this.playerName !== "") {
+            this.startGame();
+          } else {
+            $("#modal-name-alert").modal("show");
+            return;
+          }
+        } else if(this.activeScreen === "#screen-game-over"){
           this.startGame();
         }
       }
@@ -121,6 +141,8 @@ export const gameBoard = {
         this.cleanupPlayScreen();
         this.quitGame();
       }
+
+      $(".div-screen").hide();
     }
 
     $(screenID).show();
@@ -164,4 +186,8 @@ export const gameBoard = {
       }
     });
   },
+
+  showHelp() {
+    $('#modal-help').modal('show');
+  }
 };

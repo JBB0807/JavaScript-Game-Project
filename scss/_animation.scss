@@ -26,12 +26,14 @@
 
 @keyframes move-to-bottom {
     100% {
-        bottom: -2000px;
+        //increased pixel size will make animation timing change unoticable even with screen size changes 
+        transform: translateY(10000%);
     }
 }
 
 @keyframes move-to-top {
     100% {
-        bottom: 2000px;
+        //increased pixel size will make animation timing change unoticable even with screen size changes 
+        transform: translateY(-10000%);
     }
 }

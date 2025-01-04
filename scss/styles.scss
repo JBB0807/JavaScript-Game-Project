@@ -22,6 +22,11 @@ body {
     cursor: pointer; /* Changes the cursor to a pointer (hand) */
 }
 
+.modal {
+    top: 50%;
+    left: 50%;
+}
+
 .background {
     position: absolute;
     height: 100vh;
@@ -29,7 +34,7 @@ body {
     background-color: rgba(110, 102, 102, 0.493);
 }
 
-.div-game-board {
+.div-game-container {
     position: absolute;
     /* implment 3:4 aspect ratio with a height of 640px for now */
     margin: auto;
@@ -37,8 +42,8 @@ body {
     right: 0;
     left: 0;
     bottom: 0;
-    width: 480px;
-    height: 640px;
+    width: 360px;
+    height: 480px;
     border: 2px solid black;
     background-color: whitesmoke;
 }
@@ -110,6 +115,10 @@ body {
     font-size: x-large;
 }
 
+#input-player-name{
+    width: 100%;
+}
+
 #difficulty-selector {
     display: flex;
     justify-content: center;
@@ -117,6 +126,10 @@ body {
 
 .div-game-object {
     position: absolute;
+}
+
+#player-name {
+    font-size: small;
 }
 
 #player-spaceship {
@@ -127,7 +140,7 @@ body {
 #container-player-hp{
     position: absolute;
     display: block;
-    bottom: 2%;
+    top: 95%;
     left:  2%;
     width: 30%;
     height: .2rem;
@@ -150,7 +163,7 @@ body {
     display: inline;
     width: 10%;
     height: auto;
-    animation: move-to-bottom 15s linear;
+    animation: move-to-bottom 25s linear;
 }
 
 .img-drone {
@@ -158,17 +171,17 @@ body {
     height: auto;
 }
 
-#screen-play{
-    background: url("../images/nasas-webb-hubble-examine-galaxy-pair_54107357754_o.webp");
-    background-size: cover;
-    background-position: 0% 100%;
-    background-blend-mode: color-burn;
-    background-color: rgba(0, 0, 0, 0.212);
-}
+
 
 #div-game-board{
+    // position: absolute;
     height: inherit;
     width: inherit;
+        background: url("../images/nasas-webb-hubble-examine-galaxy-pair_54107357754_o.webp");
+        background-size: cover;
+        background-position: 0% 100%;
+        background-blend-mode: color-burn;
+        background-color: rgba(0, 0, 0, 0.212);
 }
 
 #screen-pause{
@@ -178,13 +191,13 @@ body {
 #drone-ammo {
     width: 5%;
     height: auto;
-    animation: move-to-bottom 10s linear, rotatefull 1.5s linear infinite;
+    animation: move-to-bottom 8s linear, rotatefull 1.5s linear infinite;
 }
 
 #player-ammo {
     width: 3%;
     height: auto;
-    animation: move-to-top 4.5s linear;
+    animation: move-to-top 6s linear;
 }
 
 .high-vis-font {
@@ -195,3 +208,19 @@ body {
     -1px  1px 0 rgb(88, 213, 255),  /* Bottom-left shadow */
      1px  1px 0 rgb(88, 213, 255);  /* Bottom-right shadow */
 }
+
+  @media (min-width: 768px) {
+    .div-game-container {
+        width: 480px;
+        height: 640px;
+    }
+    
+  }
+
+  @media (min-width: 768px) and (min-height: 1080px) {
+    .div-game-container {
+        width: 720px;
+        height: 960px;
+    }
+    
+  }
