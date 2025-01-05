@@ -58,6 +58,7 @@ function setupListeners() {
   $(document).keyup(function (event) {
     gameBoardEventHandler.registerKeyRelease(event.key);
   });
+
 }
 
 //

@@ -1,3 +1,30 @@
+.background-animation {
+    animation: background-movement 240s linear;
+    animation-play-state: paused;
+}
+
+.launch-animation {
+    animation: scale-300 1.5s ease-in;
+}
+
+.animate-fade {
+    animation: fade .3s ease-in forwards;
+}
+
+.animate-white-out {
+    animation: opacity-full 1.5s ease-in;
+}
+
+@keyframes opacity-full {
+    75% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @keyframes rotatefull {
     0%{
         transform: rotate(0deg);
@@ -6,12 +33,6 @@
     100%{
         transform: rotate(359deg);
     }
-}
-
-
-.background-animation {
-    animation: background-movement 240s linear;
-    animation-play-state: paused;
 }
 
 @keyframes background-movement {
@@ -35,5 +56,18 @@
     100% {
         //increased pixel size will make animation timing change unoticable even with screen size changes 
         transform: translateY(-10000%);
+    }
+}
+
+@keyframes scale-300 {
+    100% {
+        //increased pixel size will make animation timing change unoticable even with screen size changes 
+        transform: scale(500%)
+    }
+}
+
+@keyframes fade {
+    100% {
+        opacity: 0;
     }
 }

@@ -28,6 +28,7 @@ export function loopFirstDrop() {
   bgMusicBFSource.loop = true;
   bgMusicBFSource.loopStart = 47.49;
   bgMusicBFSource.loopEnd = 63.49;
+  //total loop time is 16
 }
 
 export function endBGMusicLoop() {
@@ -35,6 +36,10 @@ export function endBGMusicLoop() {
   console.log("end loop");
 
   bgMusicBFSource.loop = false;
+}
+
+export function getBGMusicTime(){
+  bgAudioContext
 }
 
 // END - Sound setup for background music

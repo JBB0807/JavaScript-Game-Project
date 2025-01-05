@@ -28,7 +28,7 @@ export const gameBoard = {
     this.adjustDifficulty(0);
   },
 
-  getDifficultyMultiplier(){
+  getDifficultyMultiplier() {
     //return a diffuclty multiplier by exponential increase per index(0,1,2)  , 1 = easy), 2 = easy, 4 = hard
     return Math.pow(2, this.diffifucltyIndex);
   },
@@ -40,7 +40,7 @@ export const gameBoard = {
     this.addScore(0);
     this.addGameObject("#player-spaceship");
 
-    this.resumeGame()
+    this.resumeGame();
 
     playBGSound();
   },
@@ -91,12 +91,17 @@ export const gameBoard = {
     $("#div-score").text(this.score);
   },
 
-  addGameObject(elementID, xPostiion, yPosition) {
+  addGameObject(elementID, isPartOfSwarm, xPostiion, yPosition) {
+    let object;
     if (elementID === "#player-spaceship") {
-      this.objPlayer = new Player();
+      object = new Player();
+      this.objPlayer = object;
     } else if (elementID === "#drone-container") {
-      this.arrEnemies.push(new Drone());
+      object = new Drone(isPartOfSwarm, xPostiion, yPosition);
+      this.arrEnemies.push(object);
     }
+
+    return object;
   },
 
   cleanupPlayScreen() {
@@ -114,30 +119,29 @@ export const gameBoard = {
         });
   },
 
-  switchScreen(screenID) {
+  async switchScreen(screenID) {
     if (screenID === "#screen-pause") {
       this.pauseGame();
     } else {
-
       if (screenID === "#screen-play") {
         if (this.activeScreen === "#screen-pause") {
           this.resumeGame();
         } else if (this.activeScreen === "#screen-main") {
           //validation of user name
           this.playerName = $("#input-player-name").val();
-          if(this.playerName !== "") {
-            this.startGame();
+          if (this.playerName !== "") {
+            await this.animateSpaceLaunch();
           } else {
             $("#modal-name-alert").modal("show");
             return;
           }
-        } else if(this.activeScreen === "#screen-game-over"){
+        } else if (this.activeScreen === "#screen-game-over") {
           this.startGame();
         }
       }
 
       //perform cleanup of play screen when going to main screen or the game over
-      if ((this.activeScreen === "#screen-pause" && screenID === "#screen-main") || screenID === "#screen-game-over") {
+      if (screenID === "#screen-main" || screenID === "#screen-game-over") {
         this.cleanupPlayScreen();
         this.quitGame();
       }
@@ -155,6 +159,7 @@ export const gameBoard = {
     $("#header-item-sound").show();
 
     if (this.activeScreen === "#screen-credits") {
+      $("#header-item-sound").hide();
       return;
     }
 
@@ -188,6 +193,37 @@ export const gameBoard = {
   },
 
   showHelp() {
-    $('#modal-help').modal('show');
-  }
+    $("#modal-help").modal("show");
+  },
+
+  isSwarmCleared() {
+    let clear = true;
+    this.arrEnemies.forEach((obj) => {
+      if (obj instanceof Drone) {
+        if (obj.isPartOfSwarm) {
+          clear = false;
+        }
+      }
+    });
+    return clear;
+  },
+
+  animateSpaceLaunch() {
+    console.log("animateSpaceLaunch");
+    $("#screen-white-overlay").addClass("animate-white-out");
+    $("#main-screen-foreground").addClass("launch-animation");
+    $("#main-screen-text-container").addClass("animate-fade");
+    $(".div-header").addClass("animate-fade");
+
+    return new Promise((resolve) => {
+      $("#main-screen-foreground").on("animationend", function () {
+        $("#screen-white-overlay").removeClass("animate-white-out");
+        $("#main-screen-foreground").removeClass("launch-animation");
+        $("#main-screen-text-container").removeClass("animate-fade");
+        $(".div-header").removeClass("animate-fade");
+        gameBoard.startGame();
+        resolve();
+      });
+    });
+  },
 };

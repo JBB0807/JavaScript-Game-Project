@@ -12,11 +12,11 @@ import { playPlayerLaserSound, playDroneLaserSound } from "./soundManager.js";
 //
 //Game object classes
 
-class Swarm {
+export class Swarm {
   domReference;
-  animation;
+  animationClass;
 
-  spawnRate = 500;
+  spawnRate = 1000;
   lastSpawnTime = 0;
   currentSpawnCount = 0;
   spawnSize = 10;
@@ -25,8 +25,8 @@ class Swarm {
   groupCountPerSpawn = 1;
 
   //define to give swarm a fixed position to start
-  xOrigin;
-  yOrigin;
+  xOrigin = 0;
+  yOrigin = null;
 
   //incremental position if objects are spawned in a group
   groupIncrementX;
@@ -38,25 +38,38 @@ class Swarm {
   yRandomMin;
   yRandomMax;
 
+  constructor(domReference, animation){
+    this.domReference = domReference;
+    this.animation = animation;
+  }
+
   addObject(highResTimestamp) {
     this.lastSpawnTime = highResTimestamp;
 
+    let object = gameBoard.addGameObject(this.domReference, true, this.xOrigin, this.yOrigin);
+    object.domReference.removeClass("default-drone-anim");
+    object.domReference.addClass(this.animation);
     //add onjects here
   }
 
   check(highResTimestamp) {
 
-    if(lastSpawnTime === null){
+    if(this.lastSpawnTime === null){
       this.lastSpawnTime = highResTimestamp;
     }
 
-    if(highResTimestamp - this.lastSpawnTime >= this.spawnRate){
+    if(highResTimestamp - this.lastSpawnTime >= this.spawnRate && this.spawnSize > this.currentSpawnCount){
+      this.currentSpawnCount++;
       this.addObject(highResTimestamp);
     }
   }
 
   onPause(){
     this.lastSpawnTime = null;
+  }
+
+  spawnComplete(){
+    return this.spawnSize == this.currentSpawnCount;
   }
 
 }
@@ -134,7 +147,7 @@ export class Player extends SpaceShip {
     const ammoElementId = "#player-ammo";
     //variable speed to make is consistent regardless of the the screen size
     const speed = 4 * gameBoard.domReference.width() / 480;
-    const hp = 100;
+    const hp = 1000;
     const def = 10;
     const atk = 10;
     
@@ -190,9 +203,9 @@ export class Enemy extends SpaceShip {
 }
 
 export class Drone extends Enemy {
-  constructor(isPartOfSwarm = false, x, y) {
+  constructor(isPartOfSwarm = false, x = null, y = null) {
     const elementID = "#drone-container";
-    const ammoElementId = "#drone-ammo";
+    const ammoElementId = "#drone-ammo-container";
     const speed = 2;
     const hp = 100;
     const def = 5;
@@ -200,16 +213,16 @@ export class Drone extends Enemy {
 
     super(elementID, ammoElementId, speed, hp, def, atk);
 
-    const leftOffset = x
+    this.isPartOfSwarm = isPartOfSwarm;
+    const leftOffset = x !== null
       ? x
       : `${
           getRandomNumber(20, gameBoard.domReference.width()) -
           this.domReference.width() / 2
         }px`;
 
-    const bottomOffset = y ? y : "100%";
+    const bottomOffset = y !== null ? y : "100%";
 
-    this.isPartOfSwarm = isPartOfSwarm;
     this.domReference.css("left", leftOffset).css("bottom", bottomOffset);
   }
 

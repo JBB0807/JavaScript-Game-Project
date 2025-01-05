@@ -59,12 +59,13 @@ export const gameBoardEventHandler = {
         gameBoardEventHandler.keyframe = highResTimestamp;
       }
 
-      stageManager.stageCheck(highResTimestamp); 
   
       if (
         highResTimestamp - gameBoardEventHandler.keyframe >
         gameBoardEventHandler.targetFrameRate
       ) {
+
+        stageManager.stageCheck(highResTimestamp); 
 
         gameBoardEventHandler.updatePlayerMovement(highResTimestamp);
   

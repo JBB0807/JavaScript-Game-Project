@@ -57,3 +57,9 @@ export function isOverlapping(obj1, obj2) {
 
   return x1_1 < x2_2 && x1_2 > x2_1 && y1_1 < y2_2 && y1_2 > y2_1;
 }
+
+//return true or false based on probability precentage, e.g. 80 input will give an 80% probability of true
+export function drawProbability(probabilityPercentage) {
+  const randomInt = getRandomNumber(1, 100);
+  return randomInt <= probabilityPercentage;
+}

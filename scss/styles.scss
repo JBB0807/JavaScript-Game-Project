@@ -1,6 +1,6 @@
 @use 'animation' as *;
 @use 'flight-path-anim' as *;
-
+@use 'game-objects' as *;
 
 /* CSS Reset */
 html {
@@ -46,12 +46,46 @@ body {
     height: 480px;
     border: 2px solid black;
     background-color: whitesmoke;
+    overflow: hidden;
+}
+
+input{
+    background-color: rgba(255, 255, 255, 0.462);
+}
+
+#main-screen-foreground {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: url("../images/main-page-foreground.webp");
+    background-size: cover;
+    background-position: 60% 0%;
+    background-blend-mode: color-burn;
+    background-color: rgba(0, 0, 0, 0.081); 
+}
+
+#main-screen-background {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: url("../images/galaxy-1736072645982-9264.webp");
+    background-size: cover;
+    background-position: 60% 0%;
 }
 
 .div-screen {
     position: absolute;
     height: inherit;
     width: inherit;
+}
+
+#screen-white-overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: white;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .div-header > * > * {
@@ -115,6 +149,44 @@ body {
     font-size: x-large;
 }
 
+#screen-credits {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: url("../images/credits_background.webp");
+    background-size: cover;
+    background-position: 60% 0%;
+    background-blend-mode: overlay;
+    background-color: rgba(0, 0, 0, 0.434); 
+}
+
+#credits-title {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    top: 0;
+}
+
+#credits-menu{
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    bottom: 0;
+}
+
+.div-credits {
+    position: relative;
+    text-align: center;
+    margin: auto;
+    width: 90%;
+    font-family: "Audiowide", sans-serif;
+    // font-weight: 100;
+    font-size: small;
+}
+
 #input-player-name{
     width: 100%;
 }
@@ -124,80 +196,22 @@ body {
     justify-content: center;
 }
 
-.div-game-object {
-    position: absolute;
-}
-
 #player-name {
     font-size: small;
-}
-
-#player-spaceship {
-    width: 10%;
-    height: auto;
-}
-
-#container-player-hp{
-    position: absolute;
-    display: block;
-    top: 95%;
-    left:  2%;
-    width: 30%;
-    height: .2rem;
-}
-
-#player-hp {
-    width: 100%;
-    height: 100%;
-    background-color: white;
-}
-
-.drone-hp {
-    width: 100%;
-    height: 2px;
-    margin-bottom: 5px;
-    background-color: rgba(255, 255, 255, 0.61);
-}
-
-#drone-container{
-    display: inline;
-    width: 10%;
-    height: auto;
-    animation: move-to-bottom 25s linear;
-}
-
-.img-drone {
-    width: 100%;
-    height: auto;
-}
-
-
-
-#div-game-board{
-    // position: absolute;
-    height: inherit;
-    width: inherit;
-        background: url("../images/nasas-webb-hubble-examine-galaxy-pair_54107357754_o.webp");
-        background-size: cover;
-        background-position: 0% 100%;
-        background-blend-mode: color-burn;
-        background-color: rgba(0, 0, 0, 0.212);
 }
 
 #screen-pause{
     background-color: rgba(124, 92, 92, 0.463);
 }
 
-#drone-ammo {
-    width: 5%;
-    height: auto;
-    animation: move-to-bottom 8s linear, rotatefull 1.5s linear infinite;
-}
-
-#player-ammo {
-    width: 3%;
-    height: auto;
-    animation: move-to-top 6s linear;
+#screen-game-over {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: url("../images/game-over-background.webp");
+    background-size: cover;
+    background-position: 60% 0%;
+    background-blend-mode: overlay;
+    background-color: rgba(0, 0, 0, 0.234); 
 }
 
 .high-vis-font {
@@ -215,12 +229,19 @@ body {
         height: 640px;
     }
     
+    .div-credits {
+        font-size: medium;
+    }
   }
 
   @media (min-width: 768px) and (min-height: 1080px) {
     .div-game-container {
         width: 720px;
         height: 960px;
+    }
+
+    .div-credits {
+        font-size: large;
     }
     
   }

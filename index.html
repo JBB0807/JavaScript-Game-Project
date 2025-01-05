@@ -23,16 +23,20 @@
             <div>Loading</div>
         </div>
         <div class="div-screen" id="screen-main">
-            <div class="div-title" id="game-title">MARQUEE</div>
-            <div class="div-menu" id="main-menu">
-                <input id="input-player-name" type="text" placeholder="Enter Player Name">
-
-                <div id="difficulty-selector">
-                    <div class="clickable" id="difficulty-adjust-left">&lt;</div>
-                    <div id="difficulty-level-display">Difficulty</div>
-                    <div class="clickable" id="difficulty-adjust-right">&gt;</div>
+            <div id="main-screen-background"></div>
+            <div id="main-screen-foreground"></div>
+            <div id="main-screen-text-container">
+                <div class="div-title high-vis-font" id="game-title">MARQUEE</div>
+                <div class="div-menu" id="main-menu">
+                    <input id="input-player-name" type="text" placeholder="Enter Player Name">
+    
+                    <div id="difficulty-selector">
+                        <div class="clickable high-vis-font" id="difficulty-adjust-left">&lt;</div>
+                        <div class="high-vis-font" id="difficulty-level-display">Difficulty</div>
+                        <div class="clickable high-vis-font" id="difficulty-adjust-right">&gt;</div>
+                    </div>
+                    <div class="clickable high-vis-font div-screen-select switch-screen-play" id="menu-start-game">Start Game</div>
                 </div>
-                <div class="clickable div-screen-select switch-screen-play" id="menu-start-game">Start Game</div>
             </div>
         </div>
         <div class="div-screen" id="screen-play">
@@ -43,33 +47,47 @@
             <div class="background-animation" id="div-game-board"></div>
         </div>
         <div class="div-screen" id="screen-pause">
-            <div class="div-title" id="pause-title">Paused</div>
+            <div class="div-title high-vis-font" id="pause-title">Paused</div>
             <div class="div-menu" id="pause-menu">
-                <div class="clickable div-screen-select switch-screen-play" id="menu-resume">Resume</div>
-                <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
+                <div class="clickable div-screen-select switch-screen-play high-vis-font" id="menu-resume">Resume</div>
+                <div class="clickable div-screen-select switch-screen-main high-vis-font">Main Menu</div>
             </div>
         </div>
         <div class="div-screen" id="screen-game-over">
-            <div class="div-title" id="game-over-title">Game Over</div>
-            <div class="div-menu" id="game-over-menu">
+            <div class="div-title high-vis-font" id="game-over-title">Game Over</div>
+            <div class="div-menu high-vis-font" id="game-over-menu">
                 <div class="clickable div-screen-select switch-screen-play">Try Again</div>
                 <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
         <div class="div-screen" id="screen-credits">
-            <div class="div-title" id="credits-title">Credits</div>
-            <div class="div-menu" id="credits-menu">
+            <div class="div-title high-vis-font" id="credits-title">Credits</div>
+            <div class="div-credits high-vis-font">
+                    Background music
+                    <br>Music Unlimited from Pixabay.mp3
+                    <br><br>Sound effects
+                    <br>Sheyvan (https://freesound.org/s/703452)
+                    <br><br>Background space photos
+                    <br>NASA
+                    <br><br>Game objects and props
+                    <br>Stable Diffusion
+                    <br><br>Game Author
+                    <br>JB Balahadia
+            </div>
+            <div class="div-menu high-vis-font" id="credits-menu">
                 <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
         <div class="div-screen div-game-object-containers">
             <img class="div-game-object" id="player-spaceship" src="./images/player-1.webp" />
-            <div class="div-game-object enemy" id="drone-container">
+            <div class="div-game-object enemy default-drone-anim" id="drone-container">
                 <div class="drone-hp"></div>
                 <img class="img-drone" id="drone-spaceship" src="./images/drone1.webp" />
             </div>
             <img class="div-game-object ammo" id="player-ammo" src="./images/player-ammo.webp" />
-            <img class="div-game-object ammo" id="drone-ammo" src="./images/drone-ammo.webp" />
+            <div class="div-game-object ammo" id="drone-ammo-container">
+                <img id="drone-ammo" src="./images/drone-ammo.webp" />
+            </div>
         </div>
         <div class="div-header">
             <div id="left-header">
@@ -88,6 +106,7 @@
                 <div class="clickable div-header-item high-vis-font" id="header-item-sound">Sound</div>
             </div>
         </div>
+        <div id="screen-white-overlay"></div>
     </div>
 
     <!-- Modal -->
@@ -102,6 +121,8 @@
                     Use W,S,A,D or arrow keys to move.
                     <br>Press spacebar to fire.
                     <br>Press esc to pause.
+                    <br>
+                    <br>Complete by reaching the end of the stage. Light Speed! 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
