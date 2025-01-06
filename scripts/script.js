@@ -2,7 +2,7 @@
 
 import {gameBoard} from './gameboard.js';
 import {gameBoardEventHandler} from './gameBoardEventHandler.js';
-import {startAudio} from "./soundManager.js"
+import {startAudio, toggleSound} from "./soundManager.js"
 
 
 $(document).ready(function () {
@@ -37,6 +37,11 @@ function setupListeners() {
     }
   });
 
+  $("#header-item-sound").on("click", function () {
+    $("#header-item-sound").toggleClass("strike-through");
+    toggleSound();
+  });
+
   $("#difficulty-adjust-right").on("click", function () {
     gameBoard.adjustDifficulty(1);
   });
@@ -59,6 +64,13 @@ function setupListeners() {
     gameBoardEventHandler.registerKeyRelease(event.key);
   });
 
+  $(document).on("blur", function () {
+    console.log("Window is not focused");
+    if(gameBoard.isRunning){
+      gameBoard.switchScreen("#screen-pause");
+    }
+    // Add logic for when the window is not focused
+  });
 }
 
 //

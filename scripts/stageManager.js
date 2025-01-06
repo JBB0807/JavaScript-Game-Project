@@ -10,17 +10,23 @@ let activeSwarm;
 export const stageManager = {
   enemiesToDefeat: [],
   activeSwarm: null,
-  currentStage: -1,
+  currentStage: -1, 
   currentStageTime: 0,
-  stageStartTime:0,
   lastSpawnKeyframe: 0,
   lastFireKeyFrame: 0,
   lastKeyFrame: null,
+  isPasued: false,
 
   stageCheck(highResTimestamp) {
     if (this.lastKeyFrame === null) {
       this.lastKeyFrame = highResTimestamp;
       return;
+    }
+
+    //calling stage check will resume the game
+    if(this.isPasued){
+      // console.log('resuming');
+      this.resume(highResTimestamp);
     }
 
     this.currentStageTime += highResTimestamp - this.lastKeyFrame;
@@ -34,6 +40,7 @@ export const stageManager = {
     // stage 4  ->> 80000 to 96000 (16000 total play time)
     // stage 5  ->> 96000 to 112000 (16000 total play time)
     // stage 6  ->> 112000 to 128000 (16000 total play time)
+    // stage 7  ->> 128000 to 146000 (18000 total play time)
     if (this.currentStage === -1 && this.currentStageTime >= 16550) {
       //stage -1 - calm - can add text or instructions or story
       this.nextStage();
@@ -65,7 +72,7 @@ export const stageManager = {
       this.checkEnemyFire(highResTimestamp, 250, 50, 1);
       if(this.activeSwarm.spawnComplete() && gameBoard.isSwarmCleared()){
         //move to the next stage if the current stage time is close to the end of the music loop
-        if((this.currentStageTime - 14490) % 16000 > 15900){
+        if((this.currentStageTime - 14490) % 16000 > 14000){
           endBGMusicLoop();
           this.nextStage();
         } else {
@@ -75,23 +82,36 @@ export const stageManager = {
       }
     } else if (this.currentStage === 3) {
       //Stage 3 calm - put text or story
-      if(this.currentStageTime > 16510){
+      if(this.currentStageTime > 18510){
         this.nextStage();
       }
     } else if (this.currentStage === 4) {
       //Stage 4 add a little meteor
+      this.checkAddDrone(highResTimestamp, 2000, 2);
       if(this.currentStageTime > 16000){
         this.nextStage();
       }
     } else if (this.currentStage === 5) {
-      //Stage 5 add meteor and drone
+      //Stage 5 add meteor 
+      this.checkAddDrone(highResTimestamp, 1000, 4);
+      this.checkEnemyFire(highResTimestamp, 1000, 50, 1);
       if(this.currentStageTime > 16000){
         this.nextStage();
       }
     } else if (this.currentStage === 6) {
-      //Stage finishing section - add text or story
+      //Stage 6 add meteor and drone
+      this.checkAddDrone(highResTimestamp, 1000, 4);
+      this.checkAddDrone(highResTimestamp, 200, 1);
+      this.checkEnemyFire(highResTimestamp, 100, 50, 1);
       if(this.currentStageTime > 16000){
         this.nextStage();
+      }
+    } else if (this.currentStage === 7) {
+      //Stage 7 finishing section - add text or story
+      if(this.currentStageTime > 18000){
+        console.log("Stage finish");
+        gameBoard.stageCleared();
+        //Finish the game
       }
     }
 
@@ -135,5 +155,26 @@ export const stageManager = {
         }
       }
     }
+  },
+
+  pause(){
+    this.isPasued = true;
+  },
+
+  resume(highResTimestamp){
+    this.isPasued = false;
+    this.lastSpawnKeyframe += highResTimestamp - this.lastKeyFrame;
+    this.lastFireKeyFrame += highResTimestamp - this.lastKeyFrame;
+    this.lastKeyFrame += highResTimestamp - this.lastKeyFrame;
+  },
+
+  reset(){
+    this.enemiesToDefeat = [];
+    this.activeSwarm = null;
+    this.currentStage = -1;
+    this.currentStageTime = 0;
+    this.lastSpawnKeyframe = 0;
+    this.lastFireKeyFrame = 0;
+    this.lastKeyFrame =  null;
   },
 };

@@ -9,17 +9,18 @@ html {
 
 *,
 *:before,
-*:after { 
+*:after {
     box-sizing: inherit;
 }
-s
-body {
+
+s body {
     position: relative;
     min-height: 100vh;
 }
 
 .clickable:hover {
-    cursor: pointer; /* Changes the cursor to a pointer (hand) */
+    cursor: pointer;
+    /* Changes the cursor to a pointer (hand) */
 }
 
 .modal {
@@ -49,7 +50,7 @@ body {
     overflow: hidden;
 }
 
-input{
+input {
     background-color: rgba(255, 255, 255, 0.462);
 }
 
@@ -61,7 +62,7 @@ input{
     background-size: cover;
     background-position: 60% 0%;
     background-blend-mode: color-burn;
-    background-color: rgba(0, 0, 0, 0.081); 
+    background-color: rgba(0, 0, 0, 0.081);
 }
 
 #main-screen-background {
@@ -88,7 +89,7 @@ input{
     pointer-events: none;
 }
 
-.div-header > * > * {
+.div-header>*>* {
     margin: 1rem;
 }
 
@@ -103,7 +104,7 @@ input{
     display: flex;
     top: 0;
     left: 0;
-    
+
 }
 
 #right-header {
@@ -156,7 +157,7 @@ input{
     background-size: cover;
     background-position: 60% 0%;
     background-blend-mode: overlay;
-    background-color: rgba(0, 0, 0, 0.434); 
+    background-color: rgba(0, 0, 0, 0.434);
 }
 
 #credits-title {
@@ -168,7 +169,7 @@ input{
     top: 0;
 }
 
-#credits-menu{
+#credits-menu {
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -187,7 +188,7 @@ input{
     font-size: small;
 }
 
-#input-player-name{
+#input-player-name {
     width: 100%;
 }
 
@@ -200,8 +201,16 @@ input{
     font-size: small;
 }
 
-#screen-pause{
+#screen-pause {
     background-color: rgba(124, 92, 92, 0.463);
+}
+
+#screen-stage-cleared {
+    background: url("../images/stage-clear-background.webp");
+    background-size: cover;
+    background-position: 60% 0%;
+    background-blend-mode: overlay;
+    // background-color: rgba(0, 0, 0, 0.234); 
 }
 
 #screen-game-over {
@@ -211,30 +220,40 @@ input{
     background-size: cover;
     background-position: 60% 0%;
     background-blend-mode: overlay;
-    background-color: rgba(0, 0, 0, 0.234); 
+    background-color: rgba(0, 0, 0, 0.234);
 }
 
 .high-vis-font {
     color: rgb(0, 44, 59);
-    text-shadow: 
-    -1px -1px 0 rgb(88, 213, 255),  /* Top-left shadow */
-     1px -1px 0 rgb(88, 213, 255),  /* Top-right shadow */
-    -1px  1px 0 rgb(88, 213, 255),  /* Bottom-left shadow */
-     1px  1px 0 rgb(88, 213, 255);  /* Bottom-right shadow */
+    text-shadow:
+        -1px -1px 0 rgb(88, 213, 255),
+        /* Top-left shadow */
+        1px -1px 0 rgb(88, 213, 255),
+        /* Top-right shadow */
+        -1px 1px 0 rgb(88, 213, 255),
+        /* Bottom-left shadow */
+        1px 1px 0 rgb(88, 213, 255);
+    /* Bottom-right shadow */
 }
 
-  @media (min-width: 768px) {
+.strike-through {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;  
+    text-decoration-color: rgba(255, 0, 0, 0.671);
+}
+
+@media (min-width: 768px) {
     .div-game-container {
         width: 480px;
         height: 640px;
     }
-    
+
     .div-credits {
         font-size: medium;
     }
-  }
+}
 
-  @media (min-width: 768px) and (min-height: 1080px) {
+@media (min-width: 768px) and (min-height: 1080px) {
     .div-game-container {
         width: 720px;
         height: 960px;
@@ -243,5 +262,5 @@ input{
     .div-credits {
         font-size: large;
     }
-    
-  }
+
+}

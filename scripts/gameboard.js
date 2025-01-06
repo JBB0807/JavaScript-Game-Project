@@ -4,6 +4,7 @@ import { gameBoardEventHandler } from "./gameBoardEventHandler.js";
 import { getXPosition, getYPosition, removeObject } from "./utils.js";
 import { SpaceShip, Player, Enemy, Drone, Ammo } from "./objects.js";
 import {playBGSound, stopAudio, fetchAudioSources, pauseAudio} from "./soundManager.js";
+import { stageManager } from "./stageManager.js";
 
 export const gameBoard = {
   playerName: null,
@@ -35,6 +36,10 @@ export const gameBoard = {
 
   startGame() {
     console.log("Start game");
+
+    //reset first to make sure everything is clean
+    this.resetGame();
+
     $("#player-name").text(this.playerName);
     this.score = 0;
     this.addScore(0);
@@ -62,14 +67,20 @@ export const gameBoard = {
     this.isRunning = false;
     gameBoardEventHandler.deactivateGameLoop();
     gameBoardEventHandler.clearKeys();
+    stageManager.pause();
     console.log(`Game Paused`);
+  },
+
+  stageCleared(){
+    this.quitGame();
+    this.switchScreen("#screen-stage-cleared");
+    console.log(`Stage Cleaed`);
   },
 
   quitGame() {
     stopAudio();
     this.isRunning = false;
-    gameBoardEventHandler.deactivateGameLoop();
-    gameBoardEventHandler.clearKeys();
+    this.resetGame();
     console.log(`Game Quit`);
   },
 
@@ -104,19 +115,21 @@ export const gameBoard = {
     return object;
   },
 
+  resetGame(){
+    gameBoardEventHandler.deactivateGameLoop();
+    gameBoardEventHandler.clearKeys();
+    this.cleanupPlayScreen();
+    stageManager.reset();
+  },
+
   cleanupPlayScreen() {
-    (this.objPlayer = null),
+      this.objPlayer = null,
       this.arrProps.splice(0, this.arrProps.length),
       this.arrEnemies.splice(0, this.arrEnemies.length),
       this.arrObstacles.splice(0, this.arrObstacles.length),
       this.playerAmmo.splice(0, this.playerAmmo.length),
       this.enemyAmmo.splice(0, this.enemyAmmo.length),
-      $(this.domReference)
-        .children()
-        .each(function () {
-          // Removes each child element
-          $(this).remove();
-        });
+      $(this.domReference).empty();
   },
 
   async switchScreen(screenID) {
@@ -135,7 +148,7 @@ export const gameBoard = {
             $("#modal-name-alert").modal("show");
             return;
           }
-        } else if (this.activeScreen === "#screen-game-over") {
+        } else if (this.activeScreen === "#screen-game-over" || this.activeScreen === "#screen-stage-cleared") {
           this.startGame();
         }
       }
@@ -214,6 +227,9 @@ export const gameBoard = {
     $("#main-screen-foreground").addClass("launch-animation");
     $("#main-screen-text-container").addClass("animate-fade");
     $(".div-header").addClass("animate-fade");
+
+    //remove all listeners first to prevent multiple execution
+    $("#main-screen-foreground").off("animationend");
 
     return new Promise((resolve) => {
       $("#main-screen-foreground").on("animationend", function () {

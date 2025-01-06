@@ -13,7 +13,9 @@ const bgAudioContext = new (window.AudioContext || window.webkitAudioContext)();
 //buffer and gain to be fetched on fetchAudioBuffer()
 let bgMusicXBuffer;
 let bgMusicGN;
+let bgMusicGNDefVol = 0.7;
 let bgMusicBFSource;
+let isOnMute = false;
 
 export function playBGSound() {
   if (bgMusicXBuffer === null) return;
@@ -38,10 +40,6 @@ export function endBGMusicLoop() {
   bgMusicBFSource.loop = false;
 }
 
-export function getBGMusicTime(){
-  bgAudioContext
-}
-
 // END - Sound setup for background music
 //
 
@@ -52,6 +50,7 @@ export function getBGMusicTime(){
   //buffer and gain to be fetched on fetchAudioBuffer()
 let playerAmmoSFXBuffer;
 let playerAmmoGN;
+const playerAmmoGNDefVol = 0.2;
 
 export function playPlayerLaserSound() {
   if (!playerAmmoSFXBuffer) return;
@@ -67,7 +66,8 @@ export function playPlayerLaserSound() {
 
     //buffer and gain to be fetched on fetchAudioBuffer()
 let droneAmmoSFXBuffer;
-let droneAmmoGN; // Set the volume
+let droneAmmoGN;
+const droneAmmoGNDefVol = 0.4;
 
 export function playDroneLaserSound() {
   if (!droneAmmoSFXBuffer) return;
@@ -82,7 +82,19 @@ export function startAudio() {
   bgAudioContext?.resume();
 }
 
-export function audioOff() {}
+export function toggleSound() {
+  isOnMute = !isOnMute;
+
+  if(isOnMute){
+    droneAmmoGN.gain.setValueAtTime(0, audioContext.currentTime);
+    playerAmmoGN.gain.setValueAtTime(0, audioContext.currentTime);
+    bgMusicGN.gain.setValueAtTime(0, bgAudioContext.currentTime);
+  } else {
+    droneAmmoGN.gain.setValueAtTime(droneAmmoGNDefVol, audioContext.currentTime);
+    playerAmmoGN.gain.setValueAtTime(playerAmmoGNDefVol, audioContext.currentTime);
+    bgMusicGN.gain.setValueAtTime(bgMusicGNDefVol, bgAudioContext.currentTime);
+  }
+}
 
 export function pauseAudio() {
   audioContext?.suspend();
@@ -124,7 +136,7 @@ export async function fetchAudioSources() {
     bgAudioContext,
     "./sounds/space-background.mp3"
   );
-  bgMusicGN = createGain(bgAudioContext, 0.7); // Set the volume
+  bgMusicGN = createGain(bgAudioContext, bgMusicGNDefVol); // Set the volume
   // END -  fetch sources for bachgroun music
 
   // fetch sources for player ammo sfx
@@ -132,7 +144,7 @@ export async function fetchAudioSources() {
     audioContext,
     "./sounds/player-ammo-sfx.wav"
   );
-  playerAmmoGN = createGain(audioContext, 0.2); // Set the volume
+  playerAmmoGN = createGain(audioContext, playerAmmoGNDefVol); // Set the volume
   // END - fetch sources for player ammo sfx
 
   // fetch sources for drone ammo sfx
@@ -140,7 +152,7 @@ export async function fetchAudioSources() {
     audioContext,
     "./sounds/player-ammo-sfx.wav"
   );
-  droneAmmoGN = createGain(audioContext, 0.4); // Set the volume
+  droneAmmoGN = createGain(audioContext, droneAmmoGNDefVol); // Set the volume
   // END - fetch sources for drone ammo sfx
 
 }

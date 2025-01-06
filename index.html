@@ -48,9 +48,16 @@
         </div>
         <div class="div-screen" id="screen-pause">
             <div class="div-title high-vis-font" id="pause-title">Paused</div>
-            <div class="div-menu" id="pause-menu">
-                <div class="clickable div-screen-select switch-screen-play high-vis-font" id="menu-resume">Resume</div>
-                <div class="clickable div-screen-select switch-screen-main high-vis-font">Main Menu</div>
+            <div class="div-menu high-vis-font" id="pause-menu">
+                <div class="clickable div-screen-select switch-screen-play" id="menu-resume">Resume</div>
+                <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
+            </div>
+        </div>
+        <div class="div-screen" id="screen-stage-cleared">
+            <div class="div-title high-vis-font" id="stage-cleared-title">Stage Cleared!</div>
+            <div class="div-menu high-vis-font" id="pause-menu">
+                <div class="clickable div-screen-select switch-screen-play">Try Again</div>
+                <div class="clickable div-screen-select switch-screen-main">Main Menu</div>
             </div>
         </div>
         <div class="div-screen" id="screen-game-over">
@@ -89,21 +96,21 @@
                 <img id="drone-ammo" src="./images/drone-ammo.webp" />
             </div>
         </div>
-        <div class="div-header">
+        <div class="div-header high-vis-font">
             <div id="left-header">
-                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-credits"
+                <div class="clickable div-header-item div-screen-select switch-screen-credits"
                     id="header-item-credits">Credits</div>
-                <div class="div-header-item high-vis-font" id="header-item-score">
+                <div class="div-header-item" id="header-item-score">
                     <div>Score: </div>
                     <div id="div-score"></div>
                 </div>
             </div>
             <div id="right-header">
-                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-help" 
+                <div class="clickable div-header-item div-screen-select switch-screen-help" 
                     id="header-item-help">help</div>
-                <div class="clickable div-header-item high-vis-font div-screen-select switch-screen-pause"
+                <div class="clickable div-header-item div-screen-select switch-screen-pause"
                     id="header-item-pause">pause</div>
-                <div class="clickable div-header-item high-vis-font" id="header-item-sound">Sound</div>
+                <div class="clickable div-header-item" id="header-item-sound">Sound</div>
             </div>
         </div>
         <div id="screen-white-overlay"></div>
