@@ -223,13 +223,13 @@ export const gameBoard = {
 
   animateSpaceLaunch() {
     console.log("animateSpaceLaunch");
+    //remove all listeners first to prevent multiple execution
+    $("#main-screen-foreground").off("animationend");
+
     $("#screen-white-overlay").addClass("animate-white-out");
     $("#main-screen-foreground").addClass("launch-animation");
     $("#main-screen-text-container").addClass("animate-fade");
     $(".div-header").addClass("animate-fade");
-
-    //remove all listeners first to prevent multiple execution
-    $("#main-screen-foreground").off("animationend");
 
     return new Promise((resolve) => {
       $("#main-screen-foreground").on("animationend", function () {

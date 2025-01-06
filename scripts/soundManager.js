@@ -1,13 +1,6 @@
 "use strict";
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-//
-// Sound setup for background music
-// 24.33 - fist big drop
-//       - loop at 48.474 64.491
-//
-//
 const bgAudioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 //buffer and gain to be fetched on fetchAudioBuffer()

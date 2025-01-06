@@ -6,6 +6,9 @@ import { drawProbability, getRandomNumber } from "./utils.js";
 import { Swarm } from "./objects.js";
 
 let activeSwarm;
+//
+// Manages the timing on when and what objects will appear on the game play
+//
 
 export const stageManager = {
   enemiesToDefeat: [],
