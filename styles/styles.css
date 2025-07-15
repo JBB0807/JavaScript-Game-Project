@@ -1,0 +1,416 @@
+.background-animation {
+  animation: background-movement 240s linear;
+  animation-play-state: paused;
+}
+
+.launch-animation {
+  animation: scale-300 1.5s ease-in;
+}
+
+.animate-fade {
+  animation: fade 0.3s ease-in forwards;
+}
+
+.animate-white-out {
+  animation: opacity-full 1.5s ease-in;
+}
+
+@keyframes opacity-full {
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes rotatefull {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+@keyframes background-movement {
+  0% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+@keyframes move-to-bottom {
+  100% {
+    transform: translateY(10000%);
+  }
+}
+@keyframes move-to-top {
+  100% {
+    transform: translateY(-10000%);
+  }
+}
+@keyframes scale-300 {
+  100% {
+    transform: scale(500%);
+  }
+}
+@keyframes fade {
+  100% {
+    opacity: 0;
+  }
+}
+.default-drone-anim {
+  animation: move-to-bottom 25s linear;
+}
+
+.trajectory1-animation {
+  animation: trajectory1 15s linear infinite;
+}
+
+@keyframes trajectory1 {
+  0% {
+    transform: translateX(-150%) translateY(100%);
+  }
+  25% {
+    transform: translateX(900%) translateY(100%);
+  }
+  27% {
+    transform: translateX(900%) translateY(200%);
+  }
+  50% {
+    transform: translateX(0%) translateY(200%);
+  }
+  52% {
+    transform: translateX(0%) translateY(300%);
+  }
+  75% {
+    transform: translateX(900%) translateY(300%);
+  }
+  77% {
+    transform: translateX(900%) translateY(400%);
+  }
+  100% {
+    transform: translateX(-100%) translateY(400%);
+  }
+}
+.div-game-object {
+  position: absolute;
+}
+
+#player-spaceship {
+  width: 10%;
+  height: auto;
+}
+
+#container-player-hp {
+  position: absolute;
+  display: block;
+  top: 95%;
+  left: 2%;
+  width: 30%;
+  height: 0.2rem;
+}
+
+#player-hp {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.drone-hp {
+  width: 100%;
+  height: 2px;
+  margin-bottom: 5px;
+  background-color: rgba(255, 255, 255, 0.61);
+}
+
+#drone-container {
+  display: inline;
+  width: 10%;
+  height: auto;
+}
+
+.img-drone {
+  width: 100%;
+  height: auto;
+}
+
+#div-game-board {
+  height: inherit;
+  width: inherit;
+  background: url("../images/nasas-webb-hubble-examine-galaxy-pair_54107357754_o.webp");
+  background-size: cover;
+  background-position: 0% 100%;
+  background-blend-mode: color-burn;
+  background-color: rgba(0, 0, 0, 0.212);
+}
+
+#drone-ammo {
+  width: 100%;
+  height: auto;
+  animation: rotatefull 1.5s linear infinite;
+}
+
+#drone-ammo-container {
+  width: 5%;
+  height: fit-content;
+  animation: move-to-bottom 9s linear;
+}
+
+#player-ammo {
+  width: 3%;
+  height: auto;
+  animation: move-to-top 6s linear;
+}
+
+/* CSS Reset */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+s body {
+  position: relative;
+  min-height: 100vh;
+}
+
+.clickable:hover {
+  cursor: pointer;
+  /* Changes the cursor to a pointer (hand) */
+}
+
+.modal {
+  top: 50%;
+  left: 50%;
+}
+
+.background {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(110, 102, 102, 0.493);
+}
+
+.div-game-container {
+  position: absolute;
+  /* implment 3:4 aspect ratio with a height of 640px for now */
+  margin: auto;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 360px;
+  height: 480px;
+  border: 2px solid black;
+  background-color: whitesmoke;
+  overflow: hidden;
+}
+
+input {
+  background-color: rgba(255, 255, 255, 0.462);
+}
+
+#main-screen-foreground {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: url("../images/main-page-foreground.webp");
+  background-size: cover;
+  background-position: 60% 0%;
+  background-blend-mode: color-burn;
+  background-color: rgba(0, 0, 0, 0.081);
+}
+
+#main-screen-background {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: url("../images/galaxy-1736072645982-9264.webp");
+  background-size: cover;
+  background-position: 60% 0%;
+}
+
+.div-screen {
+  position: absolute;
+  height: inherit;
+  width: inherit;
+}
+
+#screen-white-overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: white;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.div-header > * > * {
+  margin: 1rem;
+}
+
+.div-header * {
+  font-family: "Audiowide", sans-serif;
+  font-weight: 400;
+  font-size: large;
+}
+
+#left-header {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+}
+
+#right-header {
+  position: absolute;
+  display: flex;
+  top: 0;
+  right: 0;
+}
+
+.div-title {
+  position: absolute;
+  top: 0;
+  bottom: 15rem;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+  font-size: 4em;
+  font-family: "VT323", sans-serif;
+  font-weight: 400;
+}
+
+.div-menu {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.div-menu * {
+  text-align: center;
+  margin: 0.5rem;
+  width: fit-content;
+  font-family: "Audiowide", sans-serif;
+  font-weight: 400;
+  font-size: x-large;
+}
+
+#screen-credits {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: url("../images/credits_background.webp");
+  background-size: cover;
+  background-position: 60% 0%;
+  background-blend-mode: overlay;
+  background-color: rgba(0, 0, 0, 0.434);
+}
+
+#credits-title {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  top: 0;
+}
+
+#credits-menu {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  bottom: 0;
+}
+
+.div-credits {
+  position: relative;
+  text-align: center;
+  margin: auto;
+  width: 90%;
+  font-family: "Audiowide", sans-serif;
+  font-size: small;
+}
+
+#input-player-name {
+  width: 100%;
+}
+
+#difficulty-selector {
+  display: flex;
+  justify-content: center;
+}
+
+#player-name {
+  font-size: small;
+}
+
+#screen-pause {
+  background-color: rgba(124, 92, 92, 0.463);
+}
+
+#screen-stage-cleared {
+  background: url("../images/stage-clear-background.webp");
+  background-size: cover;
+  background-position: 60% 0%;
+  background-blend-mode: overlay;
+}
+
+#screen-game-over {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: url("../images/game-over-background.webp");
+  background-size: cover;
+  background-position: 60% 0%;
+  background-blend-mode: overlay;
+  background-color: rgba(0, 0, 0, 0.234);
+}
+
+.high-vis-font {
+  color: rgb(0, 44, 59);
+  text-shadow: -1px -1px 0 rgb(88, 213, 255), 1px -1px 0 rgb(88, 213, 255), -1px 1px 0 rgb(88, 213, 255), 1px 1px 0 rgb(88, 213, 255);
+  /* Bottom-right shadow */
+}
+
+.strike-through {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(255, 0, 0, 0.671);
+}
+
+@media (min-width: 768px) {
+  .div-game-container {
+    width: 480px;
+    height: 640px;
+  }
+  .div-credits {
+    font-size: medium;
+  }
+}
+
+@media (min-width: 768px) and (min-height: 1080px) {
+  .div-game-container {
+    width: 720px;
+    height: 960px;
+  }
+  .div-credits {
+    font-size: large;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */
+
