@@ -267,3 +267,4 @@ export class Ammo {
     $(this.domReference).css("bottom", `${yPosition}px`);
   }
 }
+
