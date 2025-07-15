@@ -5,13 +5,27 @@
 export function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
-
+ 
 export function getXPosition(obj) {
-  return parseInt($(obj.domReference).css("left"), 10);
+    const matrix = $(obj.domReference).css('transform').split(',');
+    let x = matrix[4];
+
+    if(x === undefined){
+      x = 0;
+    }
+
+  return parseInt($(obj.domReference).css("left"), 10) + parseInt(x, 10); 
 }
 
 export function getYPosition(obj) {
-  return parseInt($(obj.domReference).css("bottom"), 10);
+  const matrix = $(obj.domReference).css('transform').split(',');
+  let y = matrix[5];
+
+  if(y === undefined){
+    y = 0;
+  }
+
+  return parseInt($(obj.domReference).css("bottom"), 10) - parseInt(y, 10);
 }
 
 export function getCenterXPosition(obj) {
@@ -42,4 +56,10 @@ export function isOverlapping(obj1, obj2) {
   const y2_2 = y2_1 + $(obj2.domReference).height();
 
   return x1_1 < x2_2 && x1_2 > x2_1 && y1_1 < y2_2 && y1_2 > y2_1;
+}
+
+//return true or false based on probability precentage, e.g. 80 input will give an 80% probability of true
+export function drawProbability(probabilityPercentage) {
+  const randomInt = getRandomNumber(1, 100);
+  return randomInt <= probabilityPercentage;
 }

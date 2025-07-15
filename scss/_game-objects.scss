@@ -1,0 +1,71 @@
+
+.div-game-object {
+    position: absolute;
+}
+
+#player-spaceship {
+    width: 10%;
+    height: auto;
+}
+
+#container-player-hp{
+    position: absolute;
+    display: block;
+    top: 95%;
+    left:  2%;
+    width: 30%;
+    height: .2rem;
+}
+
+#player-hp {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.drone-hp {
+    width: 100%;
+    height: 2px;
+    margin-bottom: 5px;
+    background-color: rgba(255, 255, 255, 0.61);
+}
+
+#drone-container{
+    display: inline;
+    width: 10%;
+    height: auto;
+}
+
+.img-drone {
+    width: 100%;
+    height: auto;
+}
+
+#div-game-board{
+    // position: absolute;
+    height: inherit;
+    width: inherit;
+        background: url("../images/nasas-webb-hubble-examine-galaxy-pair_54107357754_o.webp");
+        background-size: cover;
+        background-position: 0% 100%;
+        background-blend-mode: color-burn;
+        background-color: rgba(0, 0, 0, 0.212);
+}
+
+#drone-ammo {
+    width: 100%;
+    height: auto;
+    animation: rotatefull 1.5s linear infinite;
+}
+
+#drone-ammo-container {
+    width: 5%;
+    height: fit-content;
+    animation: move-to-bottom 9s linear
+}
+
+#player-ammo {
+    width: 3%;
+    height: auto;
+    animation: move-to-top 6s linear;
+}

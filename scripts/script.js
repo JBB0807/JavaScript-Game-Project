@@ -2,7 +2,7 @@
 
 import {gameBoard} from './gameboard.js';
 import {gameBoardEventHandler} from './gameBoardEventHandler.js';
-import {startAudio} from "./soundManager.js"
+import {startAudio, toggleSound} from "./soundManager.js"
 
 
 $(document).ready(function () {
@@ -31,7 +31,15 @@ function setupListeners() {
     } else if ($(this).hasClass("switch-screen-credits")) {
       console.log("Switch to credits screen");
       gameBoard.switchScreen("#screen-credits");
+    } else if($(this).hasClass("switch-screen-help")){
+      console.log("Switch to help screen");
+      gameBoard.showHelp();
     }
+  });
+
+  $("#header-item-sound").on("click", function () {
+    $("#header-item-sound").toggleClass("strike-through");
+    toggleSound();
   });
 
   $("#difficulty-adjust-right").on("click", function () {
@@ -45,11 +53,23 @@ function setupListeners() {
   //
   //Keyboard Press/Release Listeners
   $(document).keydown(function (event) {
-    gameBoardEventHandler.registerKeyPress(event.key);
+    if(gameBoard.isRunning && event.key === "Escape"  ){
+      gameBoard.switchScreen("#screen-pause");
+    } else {
+      gameBoardEventHandler.registerKeyPress(event.key);
+    }
   });
 
   $(document).keyup(function (event) {
     gameBoardEventHandler.registerKeyRelease(event.key);
+  });
+
+  $(document).on("blur", function () {
+    console.log("Window is not focused");
+    if(gameBoard.isRunning){
+      gameBoard.switchScreen("#screen-pause");
+    }
+    // Add logic for when the window is not focused
   });
 }
 

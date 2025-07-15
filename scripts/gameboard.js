@@ -3,7 +3,8 @@
 import { gameBoardEventHandler } from "./gameBoardEventHandler.js";
 import { getXPosition, getYPosition, removeObject } from "./utils.js";
 import { SpaceShip, Player, Enemy, Drone, Ammo } from "./objects.js";
-import {playBGSound, stopAudio} from "./soundManager.js";
+import {playBGSound, stopAudio, fetchAudioSources, pauseAudio} from "./soundManager.js";
+import { stageManager } from "./stageManager.js";
 
 export const gameBoard = {
   playerName: null,
@@ -16,23 +17,35 @@ export const gameBoard = {
 
   score: null,
   difficultyOptions: ["Easy", "Normal", "Hard"],
-  diffifucltyIndex: 1,
+  diffifucltyIndex: 1, //defaults to Normal
   isRunning: false,
   activeScreen: null,
-  domReference: $("#screen-play"),
+  domReference: $("#div-game-board"),
 
   init() {
+    this.switchScreen("#screen-loading");
+    fetchAudioSources();
     this.switchScreen("#screen-main");
     this.adjustDifficulty(0);
   },
 
+  getDifficultyMultiplier() {
+    //return a diffuclty multiplier by exponential increase per index(0,1,2)  , 1 = easy), 2 = easy, 4 = hard
+    return Math.pow(2, this.diffifucltyIndex);
+  },
+
   startGame() {
-    this.playerName = $("#input-player-name").val();
+    console.log("Start game");
+
+    //reset first to make sure everything is clean
+    this.resetGame();
+
+    $("#player-name").text(this.playerName);
     this.score = 0;
     this.addScore(0);
     this.addGameObject("#player-spaceship");
 
-    this.resumeGame()
+    this.resumeGame();
 
     playBGSound();
   },
@@ -47,17 +60,27 @@ export const gameBoard = {
   },
 
   pauseGame() {
-    this.isRunning = false;
+    pauseAudio();
     this.domReference.css("animation-play-state", "paused");
     $(".ammo").css("animation-play-state", "paused");
     $(".enemy").css("animation-play-state", "paused");
+    this.isRunning = false;
     gameBoardEventHandler.deactivateGameLoop();
+    gameBoardEventHandler.clearKeys();
+    stageManager.pause();
     console.log(`Game Paused`);
+  },
+
+  stageCleared(){
+    this.quitGame();
+    this.switchScreen("#screen-stage-cleared");
+    console.log(`Stage Cleaed`);
   },
 
   quitGame() {
     stopAudio();
     this.isRunning = false;
+    this.resetGame();
     console.log(`Game Quit`);
   },
 
@@ -79,48 +102,64 @@ export const gameBoard = {
     $("#div-score").text(this.score);
   },
 
-  addGameObject(elementID, xPostiion, yPosition) {
+  addGameObject(elementID, isPartOfSwarm, xPostiion, yPosition) {
+    let object;
     if (elementID === "#player-spaceship") {
-      this.objPlayer = new Player();
-    } else if (elementID === "#drone-spaceship") {
-      this.arrEnemies.push(new Drone());
+      object = new Player();
+      this.objPlayer = object;
+    } else if (elementID === "#drone-container") {
+      object = new Drone(isPartOfSwarm, xPostiion, yPosition);
+      this.arrEnemies.push(object);
     }
+
+    return object;
+  },
+
+  resetGame(){
+    gameBoardEventHandler.deactivateGameLoop();
+    gameBoardEventHandler.clearKeys();
+    this.cleanupPlayScreen();
+    stageManager.reset();
   },
 
   cleanupPlayScreen() {
-    (this.objPlayer = null),
+      this.objPlayer = null,
       this.arrProps.splice(0, this.arrProps.length),
       this.arrEnemies.splice(0, this.arrEnemies.length),
       this.arrObstacles.splice(0, this.arrObstacles.length),
       this.playerAmmo.splice(0, this.playerAmmo.length),
       this.enemyAmmo.splice(0, this.enemyAmmo.length),
-      $("#screen-play")
-        .children()
-        .each(function () {
-          // Removes each child element
-          $(this).remove();
-        });
+      $(this.domReference).empty();
   },
 
-  switchScreen(screenID) {
+  async switchScreen(screenID) {
     if (screenID === "#screen-pause") {
       this.pauseGame();
     } else {
-      $(".div-screen").hide();
-
       if (screenID === "#screen-play") {
         if (this.activeScreen === "#screen-pause") {
           this.resumeGame();
         } else if (this.activeScreen === "#screen-main") {
+          //validation of user name
+          this.playerName = $("#input-player-name").val();
+          if (this.playerName !== "") {
+            await this.animateSpaceLaunch();
+          } else {
+            $("#modal-name-alert").modal("show");
+            return;
+          }
+        } else if (this.activeScreen === "#screen-game-over" || this.activeScreen === "#screen-stage-cleared") {
           this.startGame();
         }
       }
 
       //perform cleanup of play screen when going to main screen or the game over
-      if ((this.activeScreen === "#screen-pause" && screenID === "#screen-main") || screenID === "#screen-game-over") {
+      if (screenID === "#screen-main" || screenID === "#screen-game-over") {
         this.cleanupPlayScreen();
         this.quitGame();
       }
+
+      $(".div-screen").hide();
     }
 
     $(screenID).show();
@@ -133,6 +172,7 @@ export const gameBoard = {
     $("#header-item-sound").show();
 
     if (this.activeScreen === "#screen-credits") {
+      $("#header-item-sound").hide();
       return;
     }
 
@@ -162,6 +202,44 @@ export const gameBoard = {
       ) {
         removeObject(obj, arrOjb);
       }
+    });
+  },
+
+  showHelp() {
+    $("#modal-help").modal("show");
+  },
+
+  isSwarmCleared() {
+    let clear = true;
+    this.arrEnemies.forEach((obj) => {
+      if (obj instanceof Drone) {
+        if (obj.isPartOfSwarm) {
+          clear = false;
+        }
+      }
+    });
+    return clear;
+  },
+
+  animateSpaceLaunch() {
+    console.log("animateSpaceLaunch");
+    //remove all listeners first to prevent multiple execution
+    $("#main-screen-foreground").off("animationend");
+
+    $("#screen-white-overlay").addClass("animate-white-out");
+    $("#main-screen-foreground").addClass("launch-animation");
+    $("#main-screen-text-container").addClass("animate-fade");
+    $(".div-header").addClass("animate-fade");
+
+    return new Promise((resolve) => {
+      $("#main-screen-foreground").on("animationend", function () {
+        $("#screen-white-overlay").removeClass("animate-white-out");
+        $("#main-screen-foreground").removeClass("launch-animation");
+        $("#main-screen-text-container").removeClass("animate-fade");
+        $(".div-header").removeClass("animate-fade");
+        gameBoard.startGame();
+        resolve();
+      });
     });
   },
 };

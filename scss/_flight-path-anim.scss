@@ -1,0 +1,45 @@
+
+.default-drone-anim{
+    animation: move-to-bottom 25s linear;
+}
+
+.trajectory1-animation {
+    animation: trajectory1 15s linear infinite;
+}
+
+@keyframes trajectory1 {
+    
+    0% {
+        transform: translateX(-150%) translateY(100%);
+    }
+
+    25% {
+        //increased pixel size will make animation timing change unoticable even with screen size changes 
+        transform: translateX(900%) translateY(100%);
+    }
+
+    27% {
+        transform: translateX(900%) translateY(200%);
+    }
+
+    50% {
+        transform: translateX(0%) translateY(200%);
+    }
+
+    52% {
+        transform: translateX(0%) translateY(300%);
+    }
+
+    75% {
+        transform: translateX(900%) translateY(300%);
+    }
+
+    77% {
+        transform: translateX(900%) translateY(400%);
+    }
+
+    100% {
+        transform: translateX(-100%) translateY(400%);
+    }
+
+}

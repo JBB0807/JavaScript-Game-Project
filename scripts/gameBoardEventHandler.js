@@ -11,7 +11,6 @@ export const gameBoardEventHandler = {
     playerFiringRate: 1000 / 25,
     playerFireKeyFrame: null,
     requestAnimationFrameID: null,
-    lastDroneKeyframe: null,
   
     registerKeyPress(key) {
       if (
@@ -29,6 +28,10 @@ export const gameBoardEventHandler = {
         this.activeKeys.splice(index, 1);
         // console.log(`Active kyes: ${this.activeKeys}`);
       }
+    },
+
+    clearKeys(){
+      this.activeKeys.splice(0, this.activeKeys.length); 
     },
   
     activateGameLoop() {
@@ -56,12 +59,13 @@ export const gameBoardEventHandler = {
         gameBoardEventHandler.keyframe = highResTimestamp;
       }
 
-      stageManager.stageCheck(highResTimestamp - gameBoardEventHandler.keyframe); 
   
       if (
         highResTimestamp - gameBoardEventHandler.keyframe >
         gameBoardEventHandler.targetFrameRate
       ) {
+
+        stageManager.stageCheck(highResTimestamp); 
 
         gameBoardEventHandler.updatePlayerMovement(highResTimestamp);
   
@@ -69,14 +73,6 @@ export const gameBoardEventHandler = {
         gameBoardEventHandler.objectCleanup();
         gameBoardEventHandler.detectCollision();
         gameBoardEventHandler.keyframe = highResTimestamp;
-  
-        if(highResTimestamp - gameBoardEventHandler.lastDroneKeyframe > 1500 ){
-          gameBoardEventHandler.lastDroneKeyframe = highResTimestamp; 
-          gameBoard.addGameObject("#drone-spaceship");
-          gameBoard.arrEnemies.forEach((enemy) => {
-            enemy.fire();
-          });
-        }
       }
   
       gameBoardEventHandler.requestAnimationFrameID =
@@ -105,7 +101,7 @@ export const gameBoardEventHandler = {
         }
   
         if (key.toUpperCase() === "X") {
-          gameBoard.addGameObject("#drone-spaceship");
+          gameBoard.addGameObject("#drone-container");
         }
       });
   
